@@ -87,6 +87,71 @@ main{max-width:1180px;margin:auto;padding:18px clamp(12px,3vw,28px) 30px}
 @media(max-width:899px){#map{grid-template-columns:repeat(2,minmax(0,1fr));gap:17px 12px;min-height:600px;padding:90px 14px 28px}#map .realm{min-height:118px}}
 @media(max-width:520px){#map{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 8px;padding:82px 8px 18px;min-height:550px;border-width:4px;border-radius:20px;background-size:auto 100%;background-position:center}#map:before{font-size:10px;padding:8px 12px;letter-spacing:.3px}#map .realm{min-height:116px;padding:9px 5px;border-radius:16px}#map .realm .icon{width:39px;height:39px;font-size:22px}#map .realm strong{font-size:11px}#map .realm small{font-size:9px}}
 
+
+/* REAL WORLD MAP LAYOUT: scattered landmarks following a winding trail, not a tile grid */
+#map{display:block!important;position:relative;min-height:1500px;padding:0!important;overflow:hidden;background-color:#b8e69b!important;background-size:100% 100%!important}
+#map:after{content:"";position:absolute;z-index:0;inset:8% 4% 4%;pointer-events:none;background:transparent;border:0;
+background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 1300' preserveAspectRatio='none'%3E%3Cpath d='M100 170 C280 80 380 270 560 190 S820 100 860 300 S650 410 480 370 S180 470 140 590 S390 700 570 640 S850 700 840 830 S560 950 380 900 S120 1000 180 1120 S500 1200 760 1120' fill='none' stroke='%23b98a42' stroke-width='42' stroke-linecap='round'/%3E%3Cpath d='M100 170 C280 80 380 270 560 190 S820 100 860 300 S650 410 480 370 S180 470 140 590 S390 700 570 640 S850 700 840 830 S560 950 380 900 S120 1000 180 1120 S500 1200 760 1120' fill='none' stroke='%23fff0b0' stroke-width='30' stroke-linecap='round' stroke-dasharray='3 13'/%3E%3C/svg%3E");
+background-size:100% 100%;background-repeat:no-repeat}
+#map:before{z-index:5;top:12px}
+#map .realm{position:absolute;z-index:2;width:18%;min-height:100px;padding:10px 7px;text-align:center;border-radius:44% 44% 22px 22px;background:linear-gradient(145deg,#fffbe9f5,#e7f7c9f5);box-shadow:0 5px 0 #6b9a52,0 8px 14px #355f3840;backdrop-filter:blur(2px)}
+#map .realm:after{display:none}
+#map .realm .icon{width:44px;height:44px;font-size:24px}
+#map .realm strong{font-size:12px;line-height:1.2}
+#map .realm small{font-size:9px;line-height:1.2}
+#map .realm:nth-child(1){left:4%;top:8%}
+#map .realm:nth-child(2){left:25%;top:5%}
+#map .realm:nth-child(3){left:47%;top:10%}
+#map .realm:nth-child(4){left:72%;top:7%}
+#map .realm:nth-child(5){left:76%;top:21%}
+#map .realm:nth-child(6){left:52%;top:24%}
+#map .realm:nth-child(7){left:29%;top:22%}
+#map .realm:nth-child(8){left:5%;top:27%}
+#map .realm:nth-child(9){left:7%;top:40%}
+#map .realm:nth-child(10){left:30%;top:38%}
+#map .realm:nth-child(11){left:53%;top:41%}
+#map .realm:nth-child(12){left:76%;top:38%}
+#map .realm:nth-child(13){left:75%;top:54%}
+#map .realm:nth-child(14){left:51%;top:57%}
+#map .realm:nth-child(15){left:28%;top:54%}
+#map .realm:nth-child(16){left:5%;top:59%}
+#map .realm:nth-child(17){left:7%;top:72%}
+#map .realm:nth-child(18){left:30%;top:70%}
+#map .realm:nth-child(19){left:53%;top:73%}
+#map .realm:nth-child(20){left:75%;top:70%}
+#map .realm:nth-child(21){left:40%;top:86%;width:21%;min-height:120px}
+#map .realm:nth-child(3n){transform:rotate(2deg)}
+#map .realm:nth-child(4n){transform:rotate(-2deg)}
+@media(max-width:650px){
+ #map{min-height:2180px!important;background-size:auto 100%!important}
+ #map:after{inset:5% 1% 3%}
+ #map .realm{width:39%;min-height:108px;padding:8px 5px;border-width:2px;border-radius:40% 40% 16px 16px}
+ #map .realm .icon{width:37px;height:37px;font-size:21px;margin-bottom:5px}
+ #map .realm strong{font-size:11px}
+ #map .realm small{font-size:9px}
+ #map .realm:nth-child(1){left:4%;top:5%}
+ #map .realm:nth-child(2){left:54%;top:8%}
+ #map .realm:nth-child(3){left:7%;top:13%}
+ #map .realm:nth-child(4){left:54%;top:16%}
+ #map .realm:nth-child(5){left:7%;top:21%}
+ #map .realm:nth-child(6){left:54%;top:24%}
+ #map .realm:nth-child(7){left:7%;top:29%}
+ #map .realm:nth-child(8){left:54%;top:32%}
+ #map .realm:nth-child(9){left:7%;top:37%}
+ #map .realm:nth-child(10){left:54%;top:40%}
+ #map .realm:nth-child(11){left:7%;top:45%}
+ #map .realm:nth-child(12){left:54%;top:48%}
+ #map .realm:nth-child(13){left:7%;top:53%}
+ #map .realm:nth-child(14){left:54%;top:56%}
+ #map .realm:nth-child(15){left:7%;top:61%}
+ #map .realm:nth-child(16){left:54%;top:64%}
+ #map .realm:nth-child(17){left:7%;top:69%}
+ #map .realm:nth-child(18){left:54%;top:72%}
+ #map .realm:nth-child(19){left:7%;top:77%}
+ #map .realm:nth-child(20){left:54%;top:80%}
+ #map .realm:nth-child(21){left:30%;top:87%;width:40%}
+}
+
 </style>
 </head>
 <body>
