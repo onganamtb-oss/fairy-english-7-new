@@ -516,6 +516,34 @@ function buildFairy3D(map,canvas){
         target.userData.spin=(i%2?1:-1)*(.10+(i%3)*.025);
         target.userData.realAsset=true;
       }
+      // Dress the explorable world with real, textured environment meshes too.
+      const envSpecs=[
+        ["packs/nature-kit/tree-detailed.glb",-10,0,-8,3.8],
+        ["packs/nature-kit/tree-detailed.glb",10,0,-11,4.2],
+        ["packs/nature-kit/tree-default-dark.glb",-12,0,2,3.3],
+        ["packs/nature-kit/tree-default.glb",12,0,4,3.5],
+        ["packs/nature-kit/mushroom-redgroup.glb",-7,0,7,2.0],
+        ["packs/nature-kit/mushroom-tangroup.glb",8,0,8,1.8],
+        ["packs/nature-kit/rock-largea.glb",-13,0,-3,2.8],
+        ["packs/nature-kit/rock-largec.glb",13,0,-2,2.5],
+        ["packs/nature-kit/bridge-woodround.glb",0,0,5,2.6],
+        ["packs/tower-defense-kit/tower-round-crystals.glb",6,0,-8,2.1],
+        ["packs/nature-kit/flowers-tall.glb",-5,0,10,1.5],
+        ["packs/nature-kit/flowers-tall.glb",5,0,11,1.4]
+      ];
+      await Promise.all(envSpecs.map(([path,x,y,z,scale])=>new Promise(resolve=>{
+        loader.load(base+path,g=>{
+          const obj=g.scene.clone(true);
+          obj.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true;}});
+          box3.setFromObject(obj);box3.getSize(size3);box3.getCenter(center3);
+          const maxDim=Math.max(size3.x,size3.y,size3.z)||1;
+          obj.scale.setScalar(scale/maxDim);
+          obj.position.set(x,-center3.y*scale/maxDim+y,z);
+          obj.rotation.y=(x+z)*.08;
+          fairy3DScene.add(obj);
+          resolve();
+        },undefined,()=>resolve(null));
+      })));
     }catch(err){console.warn("Fairy GLB assets unavailable; keeping fallback models.",err)}
   })();
   // Enchanted atmosphere: individually animated motes and orbiting fairy lights.
