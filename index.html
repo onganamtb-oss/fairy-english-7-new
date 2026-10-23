@@ -461,9 +461,9 @@ function buildFairy3D(map,canvas){
     const now=performance.now()*.001;
     // Draw the explorable world first, then render a separate perspective 3D castle inside every lesson landmark.
     fairy3DRenderer.setScissorTest(false);
-    fairy3DRenderer.setViewport(0,0,Math.round(map.clientWidth*Math.min(window.devicePixelRatio||1,1.7)),Math.round(map.clientHeight*Math.min(window.devicePixelRatio||1,1.7)));
+    fairy3DRenderer.setViewport(0,0,map.clientWidth,map.clientHeight);
     fairy3DRenderer.render(fairy3DScene,fairy3DCamera);
-    const mapRect=map.getBoundingClientRect(),pr=Math.min(window.devicePixelRatio||1,1.7);
+    const mapRect=map.getBoundingClientRect();
     const buttons=castleButtons();
     fairy3DRenderer.autoClear=false;
     fairy3DRenderer.setScissorTest(true);
@@ -472,7 +472,7 @@ function buildFairy3D(map,canvas){
       const left=Math.max(0,r.left-mapRect.left+2),right=Math.min(mapRect.width,r.right-mapRect.left-2);
       const top=Math.max(0,r.top-mapRect.top+1),bottom=Math.min(mapRect.height,r.top-mapRect.top+Math.min(102,r.height*.67));
       if(right<=left||bottom<=top)continue;
-      const x=Math.round(left*pr),y=Math.round((mapRect.height-bottom)*pr),ww=Math.max(1,Math.round((right-left)*pr)),hh=Math.max(1,Math.round((bottom-top)*pr));
+      const x=left,y=mapRect.height-bottom,ww=Math.max(1,right-left),hh=Math.max(1,bottom-top);
       fairy3DRenderer.setViewport(x,y,ww,hh);fairy3DRenderer.setScissor(x,y,ww,hh);
       fairy3DRenderer.clearDepth();
       for(let j=0;j<castleModels.length;j++)castleModels[j].visible=(j===i);
