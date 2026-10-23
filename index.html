@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="fairy-build" content="FAIRY_FORCE_REFRESH_20261023">
+<meta name="fairy-build" content="FAIRY_UI_REDESIGN_V4_20261023">
 <script>/* FAIRY_FORCE_REFRESH_20261023: clear stale offline workers and caches */if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.getRegistrations().then(function(rs){rs.forEach(function(r){r.unregister()})}).catch(function(){});if("caches" in window)caches.keys().then(function(ks){ks.filter(function(k){return k.indexOf("fairy-english-7-")===0}).forEach(function(k){caches.delete(k)})}).catch(function(){})})}</script>
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" href="./icon.svg" type="image/svg+xml">
@@ -60,16 +60,79 @@ main{max-width:1180px;margin:auto;padding:18px clamp(12px,3vw,28px) 30px}
 @media(max-width:520px){.brandline{align-items:flex-start}.header-tag{display:none}.stats{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:18px}.hero{grid-template-columns:1fr;min-height:0}.hero:after{position:absolute;right:-24px;bottom:-32px;width:130px;height:130px;font-size:75px;opacity:.32}.hero>div{position:relative;z-index:1}.map{grid-template-columns:1fr}.realm{min-height:112px}.realm .icon{float:right;margin:0 0 0 10px}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
+
+/* FAIRY UI REDESIGN V4 — dashboard, storybook cards and clearer learning journey */
+:root{--ink:#202a43;--purple:#5c43a5;--gold:#ffce66;--paper:#fbf8f0;--mint:#9ce5c4;--pink:#f5b8d5;--sky:#ccefff;--line:#e8e1d4}
+body{font-family: "Trebuchet MS",ui-rounded,system-ui,sans-serif;background:#f7f4ec;background-image:radial-gradient(ellipse at 4% 28%,#dff4e7 0,transparent 24%),radial-gradient(ellipse at 96% 55%,#eee4ff 0,transparent 25%);color:var(--ink)}
+header{padding:24px clamp(16px,5vw,64px) 28px;border-radius:0 0 38px 38px;background:linear-gradient(115deg,#172f3c 0%,#245d5a 45%,#526e9e 100%);box-shadow:0 15px 35px #163e3b24}
+header:before{width:340px;height:340px;right:5%;top:-225px;border:1px solid #ffffff38;box-shadow:0 0 0 28px #ffffff09,0 0 0 58px #ffffff08}
+header:after{content:"✦  ♧  ✧  ✦";right:7%;bottom:16px;font-size:27px;letter-spacing:12px;color:#fbe4a0}
+.brandline,.stats{max-width:1240px}
+.brandmark{width:64px;height:64px;border-radius:22px;background:linear-gradient(145deg,#ffe5a3,#f6b9d6);border:3px solid #ffffff55;box-shadow:0 5px 0 #102f3c44;font-size:34px}
+header h1{font-size:clamp(24px,4vw,36px);letter-spacing:.015em}
+header p{color:#d7f3e8;font-size:14px}
+.header-tag{background:#f9e9b8;color:#274b4b;border:0;box-shadow:0 4px 0 #d6bd79;padding:10px 15px}
+.stats{gap:12px;margin-top:26px}
+.stat{border:1px solid #ffffff38;background:#ffffff12;border-radius:17px;padding:14px 16px;box-shadow:inset 0 1px #ffffff12}
+.stat span{color:#ffe5a0;font-size:19px}
+main{max-width:1240px;padding:26px clamp(14px,4vw,42px) 42px}
+#home{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:16px;align-items:stretch}
+.hero{grid-column:span 12;grid-template-columns:minmax(0,1fr) 210px;min-height:290px;padding:clamp(24px,4vw,48px);border-radius:30px;background:linear-gradient(112deg,#fff0c8 0%,#f8dfed 53%,#e2e5ff 100%);color:#24364a;box-shadow:0 10px 0 #e8d9c8,0 18px 35px #35405a12;border:1px solid #ffffff}
+.hero:after{content:"🧚🏻‍♀️";width:190px;height:190px;font-size:100px;background:radial-gradient(circle,#ffffffd9,#ffffff20 70%);border:2px solid #ffffff;filter:drop-shadow(0 12px 12px #69527a22)}
+.eyebrow{background:#fffdf5;border:1px solid #ead7a7;color:#6a5423;letter-spacing:.09em}
+.hero h2{color:#24394a;font-size:clamp(27px,4vw,43px);max-width:680px}
+.hero p{color:#4c5c6a;max-width:700px}
+.hero a{background:#245d5a;color:white!important;box-shadow:0 4px 0 #153e3d;padding:13px 17px}
+#home>.panel{margin:0;min-width:0;border:1px solid #e8e2d7;border-radius:23px;background:#fffdf8;box-shadow:0 7px 0 #e9e2d5,0 12px 24px #25384b08}
+#installPanel{grid-column:span 5;border-style:solid;background:linear-gradient(145deg,#e8f7ef,#fffdf8)}
+#installPanel h2:before{content:"✦ ";color:#4a927e}
+#home>.panel:nth-of-type(2){grid-column:span 7}
+#home>.panel:nth-of-type(3){grid-column:span 12;background:#fffdf8}
+#home>.two{grid-column:span 12;display:grid;grid-template-columns:1.1fr .9fr;gap:16px}
+#home>.two>.panel{margin:0;border:1px solid #e8e2d7;border-radius:23px;background:#fffdf8;box-shadow:0 7px 0 #e9e2d5,0 12px 24px #25384b08}
+.panel{padding:clamp(18px,2.5vw,28px)}
+.panel h2{color:#273d4c;font-size:clamp(19px,2vw,23px);display:flex;align-items:center;gap:8px}
+.muted{color:#69777d}
+.bar{height:14px;background:#e6eee8;margin:15px 0}
+.bar>div{background:linear-gradient(90deg,#4f9e83,#f1bd58,#9377c9)}
+.badge{background:#eef7f0;border:1px solid #d4eadb;color:#3e6c5b;border-radius:10px;padding:7px 11px}
+.map{grid-template-columns:repeat(3,minmax(0,1fr));gap:15px;margin-top:18px}
+.realm{min-height:178px;padding:18px;text-align:left;border:1px solid #e4e5d9;border-radius:22px;background:linear-gradient(145deg,#ffffff,#f0f7f2);box-shadow:0 6px 0 #dfe9e0;transition:transform .18s,box-shadow .18s}
+.realm:before{content:"";position:absolute;inset:0 auto 0 0;width:5px;background:#9acdb7;border-radius:22px 0 0 22px}
+.realm:hover:not(:disabled){transform:translateY(-4px) rotate(-.3deg);box-shadow:0 10px 0 #dfe9e0;border-color:#91c9b0}
+.realm .icon{display:inline-grid;place-items:center;width:54px;height:54px;border-radius:18px;background:#e1f2e7;font-size:31px;margin-bottom:10px}
+.realm strong{font-size:15px;line-height:1.35;color:#273d4c}
+.realm small{font-size:12px;line-height:1.6}
+.realm.review{background:linear-gradient(145deg,#fff9df,#fff1bd);border-color:#f0d88e;box-shadow:0 6px 0 #f0dfa7}
+.realm.review:before{background:#e7bd4f}.realm.review .icon{background:#ffebad}
+.realm.boss{color:white;background:linear-gradient(145deg,#3d315f,#79518e 70%,#b76e91);border-color:#d4a1eb;box-shadow:0 6px 0 #68417f}
+.realm.boss:before{background:#f4c96c}.realm.boss .icon{background:#ffffff21}.realm.boss strong{color:white}
+.realm.done{background:linear-gradient(145deg,#edfff5,#d8f9e8);border-color:#8cd8b0;box-shadow:0 6px 0 #b8e8cb}
+.realm.done:before{background:#4ab17a}.realm.done .icon{background:#c6f0d7}
+.realm.locked{opacity:.58;filter:grayscale(.25)}
+.btn{border-radius:12px;background:linear-gradient(135deg,#397f70,#285d61);box-shadow:0 4px 0 #b7d9ce}
+.btn.gold{background:linear-gradient(135deg,#ffdc83,#ffc653);color:#3c3a2b;box-shadow:0 4px 0 #e7b747}
+.btn.light{background:#edf4ee;color:#315c52;box-shadow:0 4px 0 #d3e4d7}
+.scene{background:linear-gradient(125deg,#204b4d,#4e7194 70%,#9276b4);border-radius:25px;padding:26px}
+.word{padding:16px 0;border-bottom:1px solid #e9eee7}.word strong{color:#315e58}
+.option{border-color:#e0e8e2;background:#fbfdf9;border-radius:13px}
+.option:hover:not(:disabled){border-color:#7db6a0;background:#eff8f1}
+.option.correct{background:#ddf9e6;border-color:#5dbd80}.option.wrong{background:#ffe4e7;border-color:#e37f8c}
+.health{background:#f3e1e4}.health div{background:linear-gradient(90deg,#e85d7c,#f2bf5c)}
+footer{margin-top:8px;color:#718079}
+@media(max-width:760px){#installPanel,#home>.panel:nth-of-type(2){grid-column:span 12}.map{grid-template-columns:repeat(2,minmax(0,1fr))}.hero{grid-template-columns:1fr 125px}.hero:after{width:120px;height:120px;font-size:65px}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:520px){header{border-radius:0 0 25px 25px}.brandline{align-items:flex-start}.header-tag{display:none}.hero{grid-template-columns:1fr;min-height:0;padding:24px}.hero:after{position:absolute;right:-15px;bottom:-25px;width:100px;height:100px;font-size:55px;opacity:.32}.hero>div{position:relative;z-index:1}#home>.two{grid-template-columns:1fr}.map{grid-template-columns:1fr}.realm{min-height:124px}.realm .icon{float:right;margin:0 0 0 12px}#installPanel,#home>.panel:nth-of-type(2){grid-column:span 12}}
+
 </style>
 </head>
 <body>
-<header><div class="brandline"><div class="brand"><div class="brandmark">🧚</div><div><h1>FAIRY ENGLISH 7</h1><p>Xứ sở Thần tiên · Global Success · Học tiếng Anh như chơi game</p></div></div><div class="header-tag">🆕 GIAO DIỆN MỚI · V3</div></div><div class="stats"><div class="stat">⭐ EXP <span id="xp">0</span></div><div class="stat">🪙 Xu <span id="coins">0</span></div><div class="stat">🧙 Cấp độ <span id="rank">Tân thủ</span></div><div class="stat">💎 Pha lê <span id="crystals">0</span>/12</div></div></header>
+<header><div class="brandline"><div class="brand"><div class="brandmark">🧚</div><div><h1>FAIRY ENGLISH 7</h1><p>Xứ sở Thần tiên · Global Success · Học tiếng Anh như chơi game</p></div></div><div class="header-tag">✨ FAIRY ADVENTURE · V4</div></div><div class="stats"><div class="stat">⭐ EXP <span id="xp">0</span></div><div class="stat">🪙 Xu <span id="coins">0</span></div><div class="stat">🧙 Cấp độ <span id="rank">Tân thủ</span></div><div class="stat">💎 Pha lê <span id="crystals">0</span>/12</div></div></header>
 <main>
 <section id="home">
 <div class="hero"><div><span class="eyebrow">✦ HÀNH TRÌNH BẮT ĐẦU</span><h2>Khám phá thế giới tiếng Anh nhiệm màu!</h2><p>Chúa tể Bóng tối đã đánh cắp 12 viên pha lê tri thức. Cùng Lumi và Ben học từ vựng, luyện ngữ pháp, vượt cổng ôn tập và chiến thắng các trận đại chiến để thắp sáng Xứ sở Thần tiên.</p><a href="story.html">▶ Xem câu chuyện mở đầu: The Lost Words</a></div></div>
 <div class="panel" id="installPanel"><h2>📲 Cài đặt và học ngoại tuyến</h2><p class="muted">Bạn có thể thêm Fairy English 7 vào màn hình chính trên trình duyệt hỗ trợ. Mở website ít nhất một lần khi có mạng để lưu các trang chính cho lần học ngoại tuyến.</p><button class="btn gold" id="installApp" type="button" style="display:none">📲 Cài đặt Fairy English 7</button><p class="muted">Trên iPhone/iPad, nếu không thấy nút cài đặt, hãy dùng Chia sẻ → Thêm vào màn hình chính trong Safari.</p></div>
 <div class="panel"><h2>🧭 Tiến trình phiêu lưu</h2><div class="bar"><div id="progress"></div></div><p class="muted" id="progressText">0 chặng hoàn thành</p><span class="badge">📚 Từ vựng</span><span class="badge">🔊 Phát âm</span><span class="badge">🧠 Ôn tập lũy tiến</span><span class="badge">🐉 Trận chiến</span></div>
-<div class="panel"><h2>🗺️ Bản đồ Xứ sở Thần tiên — KIỂM TRA BẢN MỚI 23/10</h2><p class="muted">Mỗi vùng đất tương ứng với một Unit. Review giúp ôn kiến thức; các trận chiến lớn tổng hợp nhiều Unit. Các vùng đất được mở theo tiến trình để khuyến khích học tuần tự.</p><div class="map" id="map"></div></div>
+<div class="panel"><h2>🗺️ Chọn vùng đất để bắt đầu hành trình</h2><p class="muted">Mỗi vùng đất tương ứng với một Unit. Review giúp ôn kiến thức; các trận chiến lớn tổng hợp nhiều Unit. Các vùng đất được mở theo tiến trình để khuyến khích học tuần tự.</p><div class="map" id="map"></div></div>
 <div class="two"><div class="panel"><h2>🎒 Kho báu</h2><div id="inventory">Chưa có vật phẩm. Hãy hoàn thành nhiệm vụ đầu tiên!</div><p class="muted">Tiến trình được lưu trên trình duyệt của thiết bị này.</p><button class="btn light" onclick="resetGame()">Đặt lại tiến trình</button></div><div class="panel"><h2>📜 Luật phiêu lưu</h2><ul class="list"><li>Hoàn thành thử thách để nhận EXP và xu.</li><li>Unit mới yêu cầu vượt qua cổng ôn tập kiến thức cũ.</li><li>Trả lời sai sẽ được giải thích để học lại.</li><li>Trận chiến cần đạt ít nhất 70% để chiến thắng.</li></ul></div></div>
 </section>
 <section id="lesson" style="display:none">
