@@ -1,6 +1,6 @@
 /* Fairy English 7 offline support. */
 "use strict";
-const CACHE_NAME = "fairy-english-7-v2";
+const CACHE_NAME = "fairy-english-7-new-v3";
 const APP_FILES = ["./", "./index.html", "./story.html", "./unit1.html", "./unit.html", "./manifest.webmanifest", "./icon.svg"];
 self.addEventListener("install", event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(APP_FILES)).then(() => self.skipWaiting()));
