@@ -1,0 +1,20 @@
+{
+  "name": "Fairy English 7 — Xứ sở Thần tiên",
+  "short_name": "Fairy English 7",
+  "description": "Học tiếng Anh lớp 7 qua câu chuyện, từ vựng, ngữ pháp và thử thách.",
+  "lang": "vi",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#eee4ff",
+  "theme_color": "#35205f",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
