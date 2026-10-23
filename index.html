@@ -152,6 +152,76 @@ background-size:100% 100%;background-repeat:no-repeat}
  #map .realm:nth-child(21){left:30%;top:87%;width:40%}
 }
 
+
+/* ISOMETRIC WORLD ART v2: illustrated 3D landmarks, not a background-only treatment */
+#map{isolation:isolate;display:block!important;position:relative;min-height:1500px;padding:0!important;overflow:hidden;border:7px solid #80603e;border-radius:30px;background:#b7eaff!important;box-shadow:inset 0 0 0 5px #ffe2a0,0 12px 28px #284b3730}
+#map:after{display:none!important}
+#map .world-art{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+#map:before{z-index:5;top:12px}
+#map .realm{position:absolute;z-index:2;width:18%;min-height:0;padding:5px 4px 7px;text-align:center;border:0;border-radius:0;background:transparent!important;color:#253c37!important;box-shadow:none!important;backdrop-filter:none;overflow:visible;text-shadow:0 1px 0 #fff8d8}
+#map .realm:before{content:"";position:absolute;z-index:-1;left:50%;top:6px;width:64px;height:64px;transform:translateX(-50%) rotate(45deg);border-radius:14px 14px 22px 14px;background:linear-gradient(145deg,#fff4b5,#ffb94f);border:3px solid #fff7d4;box-shadow:0 7px 0 #ae7b43,0 10px 15px #34593b55}
+#map .realm .icon{display:grid;place-items:center;width:54px;height:54px;margin:0 auto 8px;border:0;border-radius:50%;background:transparent;box-shadow:none;font-size:37px;position:relative;z-index:1;filter:drop-shadow(0 4px 2px #71532d55)}
+#map .realm strong{display:block;width:max-content;max-width:100%;margin:2px auto 0;padding:5px 8px;border:2px solid #fff0b5;border-radius:12px;background:linear-gradient(#fffdf1,#fff0bd);box-shadow:0 3px 0 #a67c4b;font-size:12px;color:#46346e;line-height:1.15;text-shadow:none}
+#map .realm small{display:block;width:max-content;max-width:100%;margin:5px auto 0;padding:3px 6px;border-radius:8px;background:#f8fff0e8;color:#365742;font-size:9px;font-weight:800;text-shadow:none;line-height:1.2}
+#map .realm.boss:before{background:linear-gradient(145deg,#d8a8ff,#7b4aa8);border-color:#ffe0ff;box-shadow:0 7px 0 #573a78,0 10px 15px #34593b55}
+#map .realm.boss strong{background:linear-gradient(#7845a0,#4e326f);color:#fff;border-color:#f4d8ff;box-shadow:0 3px 0 #39254d}
+#map .realm.boss small{background:#573a7de8;color:#fff}
+#map .realm.review:before{background:linear-gradient(145deg,#fff6a7,#ffc44e)}
+#map .realm.done:before{background:linear-gradient(145deg,#b8ffd0,#5bcf91);box-shadow:0 7px 0 #398b63,0 10px 15px #34593b55}
+#map .realm.locked{opacity:.88;filter:saturate(.75)}
+#map .realm:hover:not(:disabled){transform:translateY(-5px) scale(1.06);filter:brightness(1.05)}
+#map .realm:nth-child(1){left:4%;top:8%}
+#map .realm:nth-child(2){left:25%;top:5%}
+#map .realm:nth-child(3){left:47%;top:10%}
+#map .realm:nth-child(4){left:72%;top:7%}
+#map .realm:nth-child(5){left:76%;top:21%}
+#map .realm:nth-child(6){left:52%;top:24%}
+#map .realm:nth-child(7){left:29%;top:22%}
+#map .realm:nth-child(8){left:5%;top:27%}
+#map .realm:nth-child(9){left:7%;top:40%}
+#map .realm:nth-child(10){left:30%;top:38%}
+#map .realm:nth-child(11){left:53%;top:41%}
+#map .realm:nth-child(12){left:76%;top:38%}
+#map .realm:nth-child(13){left:75%;top:54%}
+#map .realm:nth-child(14){left:51%;top:57%}
+#map .realm:nth-child(15){left:28%;top:54%}
+#map .realm:nth-child(16){left:5%;top:59%}
+#map .realm:nth-child(17){left:7%;top:72%}
+#map .realm:nth-child(18){left:30%;top:70%}
+#map .realm:nth-child(19){left:53%;top:73%}
+#map .realm:nth-child(20){left:75%;top:70%}
+#map .realm:nth-child(21){left:40%;top:86%;width:21%}
+@media(max-width:650px){
+ #map{min-height:2180px!important}
+ #map .world-art{height:100%;width:100%}
+ #map .realm{width:39%;padding:4px 3px 6px}
+ #map .realm:before{width:52px;height:52px;border-radius:12px}
+ #map .realm .icon{width:44px;height:44px;font-size:30px;margin-bottom:7px}
+ #map .realm strong{font-size:10px;padding:4px 5px}
+ #map .realm small{font-size:8px}
+ #map .realm:nth-child(1){left:4%;top:5%}
+ #map .realm:nth-child(2){left:54%;top:8%}
+ #map .realm:nth-child(3){left:7%;top:13%}
+ #map .realm:nth-child(4){left:54%;top:16%}
+ #map .realm:nth-child(5){left:7%;top:21%}
+ #map .realm:nth-child(6){left:54%;top:24%}
+ #map .realm:nth-child(7){left:7%;top:29%}
+ #map .realm:nth-child(8){left:54%;top:32%}
+ #map .realm:nth-child(9){left:7%;top:37%}
+ #map .realm:nth-child(10){left:54%;top:40%}
+ #map .realm:nth-child(11){left:7%;top:45%}
+ #map .realm:nth-child(12){left:54%;top:48%}
+ #map .realm:nth-child(13){left:7%;top:53%}
+ #map .realm:nth-child(14){left:54%;top:56%}
+ #map .realm:nth-child(15){left:7%;top:61%}
+ #map .realm:nth-child(16){left:54%;top:64%}
+ #map .realm:nth-child(17){left:7%;top:69%}
+ #map .realm:nth-child(18){left:54%;top:72%}
+ #map .realm:nth-child(19){left:7%;top:77%}
+ #map .realm:nth-child(20){left:54%;top:80%}
+ #map .realm:nth-child(21){left:30%;top:87%;width:40%}
+}
+
 </style>
 </head>
 <body>
@@ -192,7 +262,58 @@ function persist(){try{localStorage.setItem("fairy7save",JSON.stringify(state))}
 function rank(){return state.xp>=1200?"Đại pháp sư":state.xp>=600?"Hiệp sĩ pha lê":state.xp>=250?"Nhà thám hiểm":state.xp>=60?"Học viên phép thuật":"Tân thủ"}
 function updateStats(){document.getElementById("xp").textContent=state.xp;document.getElementById("coins").textContent=state.coins;document.getElementById("rank").textContent=rank();document.getElementById("crystals").textContent=state.crystals.length;document.getElementById("progress").style.width=(state.done.length/stages.length*100)+"%";document.getElementById("progressText").textContent=state.done.length+" / "+stages.length+" chặng đã hoàn thành";document.getElementById("inventory").textContent=state.inventory.length?state.inventory.join(" · "):"Chưa có vật phẩm. Hãy hoàn thành nhiệm vụ đầu tiên!"}
 function isUnlocked(s){if(s.id==="review0")return true;if(s.type==="unit"){if(s.unit===0)return true;if(s.unit===6)return state.done.includes("u6")&&state.done.includes("final1");return state.done.includes("u"+s.unit)}if(s.id==="r1")return [1,2,3].every(n=>state.done.includes("u"+n));if(s.id==="mid1")return state.done.includes("r1");if(s.id==="r2")return [4,5,6].every(n=>state.done.includes("u"+n));if(s.id==="final1")return state.done.includes("mid1")&&state.done.includes("r2");if(s.id==="r3")return [7,8,9].every(n=>state.done.includes("u"+n));if(s.id==="mid2")return state.done.includes("r3");if(s.id==="r4")return [10,11,12].every(n=>state.done.includes("u"+n));if(s.id==="final2")return state.done.includes("final1")&&state.done.includes("mid2")&&state.done.includes("r4");return true}
-function renderMap(){let map=document.getElementById("map");map.innerHTML="";stages.forEach(s=>{let b=document.createElement("button");let locked=!isUnlocked(s);b.className="realm "+(s.type==="boss"?"boss":s.type==="review"?"review":"")+(state.done.includes(s.id)?" done":"")+(locked?" locked":"");b.innerHTML='<span class="icon">'+s.icon+'</span><strong>'+s.name+'</strong><small>'+s.vi+(state.done.includes(s.id)?" · ✓ Đã hoàn thành":locked?" · 🔒 Cần hoàn thành chặng trước":" · Chạm để khám phá")+'</small>';b.disabled=locked;b.onclick=()=>openStage(s);map.appendChild(b)});updateStats()}
+function renderMap(){let map=document.getElementById("map");map.innerHTML="";stages.forEach(s=>{let b=document.createElement("button");let locked=!isUnlocked(s);b.className="realm "+(s.type==="boss"?"boss":s.type==="review"?"review":"")+(state.done.includes(s.id)?" done":"")+(locked?" locked":"");b.innerHTML='<span class="icon">'+s.icon+'</span><strong>'+s.name+'</strong><small>'+(state.done.includes(s.id)?"✓ Đã hoàn thành":locked?"🔒 Khóa":"Chạm để khám phá")+'</small>';b.disabled=locked;b.onclick=()=>openStage(s);map.appendChild(b)});map.insertAdjacentHTML("beforeend",`<svg class="world-art" viewBox="0 0 1000 1300" preserveAspectRatio="none" aria-hidden="true">
+<defs>
+ <linearGradient id="skyland" x2="0" y2="1"><stop stop-color="#b7eaff"/><stop offset=".48" stop-color="#c9f0d0"/><stop offset="1" stop-color="#79c982"/></linearGradient>
+ <linearGradient id="hill3d" x2=".2" y2="1"><stop stop-color="#c8f0a1"/><stop offset="1" stop-color="#69b96e"/></linearGradient>
+ <linearGradient id="cliff3d" x2="0" y2="1"><stop stop-color="#e4bd79"/><stop offset="1" stop-color="#9c684d"/></linearGradient>
+ <linearGradient id="water3d" x2="0" y2="1"><stop stop-color="#8ce7ff"/><stop offset="1" stop-color="#3199dc"/></linearGradient>
+ <linearGradient id="castle3d" x2="1" y2="1"><stop stop-color="#fff2c9"/><stop offset="1" stop-color="#dca9b4"/></linearGradient>
+ <filter id="shadow3d" x="-30%" y="-30%" width="160%" height="170%"><feDropShadow dx="0" dy="13" stdDeviation="10" flood-color="#315c56" flood-opacity=".35"/></filter>
+ <g id="pine"><path d="M0 48 20 4 40 48Z" fill="#27795a"/><path d="M20 4 40 48 20 39Z" fill="#56b979"/><path d="M4 32 20 -8 36 32Z" fill="#398e62"/><path d="M20 -8 36 32 20 24Z" fill="#7ad18a"/><path d="M16 46h8v16h-8Z" fill="#8b624a"/></g>
+</defs>
+<rect width="1000" height="1300" fill="url(#skyland)"/>
+<circle cx="825" cy="100" r="46" fill="#fff5ad" opacity=".95"/><circle cx="825" cy="100" r="65" fill="#fff5ad" opacity=".22"/>
+<g fill="#fff" opacity=".8"><ellipse cx="125" cy="100" rx="55" ry="18"/><circle cx="150" cy="86" r="28"/><circle cx="181" cy="103" r="22"/><ellipse cx="895" cy="260" rx="52" ry="16"/><circle cx="870" cy="247" r="24"/><circle cx="922" cy="248" r="29"/></g>
+<!-- layered distant mountains -->
+<path d="M0 270 105 130 180 230 300 70 405 230 520 105 645 250 755 95 900 245 1000 150V470H0Z" fill="#9eb9cf"/>
+<path d="M105 130 180 230 143 209 126 214Z M300 70 405 230 354 191 328 199Z M520 105 645 250 590 213 557 220Z M755 95 900 245 842 211 796 220Z" fill="#f5fbff"/>
+<path d="M0 320Q150 220 270 320T520 310T760 300T1000 275V620H0Z" fill="#8ccf9b"/>
+<path d="M0 425Q180 315 340 430T650 410T1000 390V780H0Z" fill="#65bd7e"/>
+<!-- rolling foreground hills -->
+<path d="M0 680Q130 570 260 680T530 650T800 670T1000 620V1300H0Z" fill="url(#hill3d)"/>
+<path d="M0 930Q170 820 330 940T650 910T1000 900V1300H0Z" fill="#83d17f"/>
+<!-- winding blue river -->
+<path d="M-40 330C150 370 220 500 370 470S590 330 690 500 790 730 680 800 420 810 350 940 470 1120 700 1150 910 1210 1040 1280" fill="none" stroke="#4d9e69" stroke-width="105" opacity=".35"/>
+<path d="M-40 320C150 360 220 490 370 460S590 320 690 490 790 720 680 790 420 800 350 930 470 1110 700 1140 910 1200 1040 1270" fill="none" stroke="url(#water3d)" stroke-width="78"/>
+<path d="M-40 300C150 340 220 470 370 440S590 300 690 470 790 700 680 770 420 780 350 910 470 1090 700 1120 910 1180 1040 1250" fill="none" stroke="#d3faff" stroke-width="8" stroke-dasharray="20 22" opacity=".8"/>
+<!-- magical stone road -->
+<path d="M75 180C260 95 350 260 540 190S810 130 850 310 650 420 480 390 170 490 145 620 400 730 590 680 860 740 840 860 570 970 390 930 160 1030 210 1150 520 1210 790 1150" fill="none" stroke="#8a7258" stroke-width="48" stroke-linecap="round"/>
+<path d="M75 180C260 95 350 260 540 190S810 130 850 310 650 420 480 390 170 490 145 620 400 730 590 680 860 740 840 860 570 970 390 930 160 1030 210 1150 520 1210 790 1150" fill="none" stroke="#ffe3a1" stroke-width="36" stroke-linecap="round" stroke-dasharray="4 10"/>
+<!-- floating island shadows and 3D cliffs -->
+<g filter="url(#shadow3d)">
+ <path d="M360 210 480 150 600 210 480 270Z" fill="#e9d39a"/><path d="M360 210 480 270 480 315 390 270Z" fill="url(#cliff3d)"/><path d="M480 270 600 210 570 270 480 315Z" fill="#a87555"/><path d="M390 205 480 165 570 205 480 248Z" fill="#8edb8c"/>
+ <path d="M620 515 730 460 840 515 730 570Z" fill="#e9d39a"/><path d="M620 515 730 570 730 610 650 570Z" fill="url(#cliff3d)"/><path d="M730 570 840 515 820 565 730 610Z" fill="#a87555"/><path d="M650 510 730 475 810 510 730 548Z" fill="#a1e28b"/>
+ <path d="M110 790 215 735 320 790 215 845Z" fill="#e9d39a"/><path d="M110 790 215 845 215 885 135 845Z" fill="url(#cliff3d)"/><path d="M215 845 320 790 300 840 215 885Z" fill="#a87555"/><path d="M135 785 215 750 295 785 215 823Z" fill="#9cdd83"/>
+</g>
+<!-- castle: layered 3D towers, roof facets, windows -->
+<g transform="translate(470 105)" filter="url(#shadow3d)">
+ <path d="M-80 95 0 55 86 95 0 137Z" fill="#a889bd"/><path d="M-80 95 0 137 0 210-80 168Z" fill="#d8a9ba"/><path d="M0 137 86 95 86 168 0 210Z" fill="#b57eab"/>
+ <path d="M-60 65V-10L-40-24-20-10V84Z" fill="#e8c7d2"/><path d="M-40-24-20-10V84L-40 95Z" fill="#c68da9"/><path d="M-70-10-40-47-10-10Z" fill="#744ca4"/><path d="M-40-47-10-10-40-1Z" fill="#b17ed0"/>
+ <path d="M20 55V-24L43-39 66-24V34Z" fill="#f3d8d9"/><path d="M43-39 66-24V34L43 45Z" fill="#c78fb6"/><path d="M10-24 43-65 76-24Z" fill="#7545a0"/><path d="M43-65 76-24 43-12Z" fill="#b17ed0"/>
+ <path d="M-20 100V35L0 20 20 35V110Z" fill="#fff0c9"/><path d="M0 20 20 35V110L0 120Z" fill="#dfb1bc"/><path d="M-29 35 0 0 29 35Z" fill="#6445a0"/><path d="M0 0 29 35 0 45Z" fill="#aa76ca"/>
+ <path d="M-10 210V165Q0 143 10 165V210Z" fill="#664b91"/><path d="M-10 210V165Q0 143 10 165V210Z" fill="#664b91"/>
+ <g fill="#76d8f2" stroke="#fff0d0" stroke-width="4"><rect x="-52" y="28" width="13" height="22" rx="6"/><rect x="29" y="15" width="13" height="22" rx="6"/><rect x="-6" y="72" width="13" height="22" rx="6"/></g>
+ <path d="M0-65V-93" stroke="#fff2a8" stroke-width="4"/><path d="M0-93 23-86 0-79Z" fill="#ff7eb7"/>
+</g>
+<!-- arched bridge -->
+<g transform="translate(270 520)" filter="url(#shadow3d)"><path d="M0 45Q85 -35 170 45L170 70Q85-10 0 70Z" fill="#f6dc9d" stroke="#a87a58" stroke-width="5"/><path d="M0 45Q85-35 170 45" fill="none" stroke="#fff2c7" stroke-width="12"/><path d="M0 45V83M170 45V83" stroke="#a87a58" stroke-width="9"/></g>
+<!-- enchanted forests -->
+<g><use href="#pine" x="55" y="290"/><use href="#pine" x="90" y="320"/><use href="#pine" x="125" y="290"/><use href="#pine" x="875" y="400"/><use href="#pine" x="910" y="430"/><use href="#pine" x="840" y="445"/><use href="#pine" x="80" y="700"/><use href="#pine" x="120" y="735"/><use href="#pine" x="875" y="920"/><use href="#pine" x="915" y="950"/><use href="#pine" x="820" y="965"/></g>
+<!-- flowers, crystal shards, stepping stones -->
+<g filter="url(#shadow3d)"><g transform="translate(180 365)"><path d="M0 0V38" stroke="#398e62" stroke-width="5"/><circle cx="0" cy="-8" r="9" fill="#ff91c8"/><circle cx="-9" cy="0" r="9" fill="#ff91c8"/><circle cx="9" cy="0" r="9" fill="#ff91c8"/><circle cy="1" r="6" fill="#ffe777"/></g><g transform="translate(795 640)"><path d="M0 35 12 0 24 35Z" fill="#8f7cff"/><path d="M12 0 24 35 12 29Z" fill="#d7caff"/><path d="M28 35 38 12 48 35Z" fill="#55d8f4"/></g><g fill="#f7e5b4" stroke="#bc9666" stroke-width="3"><ellipse cx="250" cy="470" rx="17" ry="8"/><ellipse cx="285" cy="477" rx="17" ry="8"/><ellipse cx="320" cy="484" rx="17" ry="8"/></g></g>
+<g fill="#fff0a1"><path d="m710 350 8 18 20 3-15 13 4 20-17-10-17 10 4-20-15-13 20-3Z"/><path d="m330 650 6 13 15 2-11 10 3 15-13-7-13 7 3-15-11-10 15-2Z"/><path d="m720 1010 7 15 17 2-12 12 3 17-15-8-15 8 3-17-12-12 17-2Z"/></g>
+</svg>`);updateStats()}
 function goHome(){document.getElementById("home").style.display="block";document.getElementById("lesson").style.display="none";renderMap();window.scrollTo({top:0,behavior:"smooth"})}
 function openStage(s){if(!isUnlocked(s))return;current=s;document.getElementById("home").style.display="none";document.getElementById("lesson").style.display="block";document.getElementById("sceneIcon").textContent=s.icon;document.getElementById("sceneHeading").textContent=s.type==="boss"?"Đại chiến phép thuật":s.name;document.getElementById("sceneSub").textContent=s.type==="unit"?units[s.unit].story[0]:s.type==="boss"?"Trả lời đúng để làm suy yếu Chúa tể Bóng tối!":"Ôn lại kiến thức và thu thập năng lượng.";document.getElementById("title").textContent=s.name+" — "+s.vi;document.getElementById("desc").textContent=s.type==="unit"?"Học từ vựng, nghe phát âm, xem câu chuyện và hoàn thành nhiệm vụ. Hệ thống cũng đưa kiến thức các Unit trước trở lại để bạn ghi nhớ lâu hơn.":s.type==="boss"?"Đây là trận chiến tổng hợp. Mỗi câu trả lời đúng làm giảm năng lượng của trùm. Bạn cần đạt ít nhất 70% để chiến thắng.":"Ôn từ vựng và cấu trúc trong các Unit thuộc chặng này.";document.getElementById("quiz").style.display="none";document.getElementById("result").style.display="none";document.getElementById("actions").style.display="block";document.getElementById("lessonContent").style.display="block";let gate=document.getElementById("gate");gate.innerHTML="";if(s.type==="unit"&&s.unit>0){let p=document.createElement("p");p.className="badge";p.textContent="🔁 Cổng ôn bài cũ: có câu hỏi từ Unit "+Math.max(1,s.unit-1)+" trước khi vào bài mới.";gate.appendChild(p)}let box=document.getElementById("lessonContent");box.innerHTML="";let wordList=getWords(s);let h=document.createElement("h3");h.textContent="📚 Từ vựng trong vùng đất";box.appendChild(h);wordList.slice(0,12).forEach(w=>box.appendChild(makeWord(w)));if(s.type==="unit"){let st=units[s.unit].story;let sh=document.createElement("h3");sh.textContent="🎞️ Câu chuyện";box.appendChild(sh);let p=document.createElement("p");p.textContent=st[0];box.appendChild(p);let en=document.createElement("p");en.innerHTML="<b>"+st[1]+"</b><br><span class='translation'>"+st[2]+"</span>";box.appendChild(en);let link=document.createElement("a");link.href=s.unit===0?"./unit1.html":"./unit.html?u="+(s.unit+1);link.className="btn gold";link.style.display="inline-block";link.style.textDecoration="none";link.textContent="🎞️ Bắt đầu phim và bài học Unit "+(s.unit+1);box.appendChild(link);let gh=document.createElement("h3");gh.textContent="✨ Luyện phép thuật ngữ pháp";box.appendChild(gh);units[s.unit].grammar.forEach(g=>{let p=document.createElement("p");p.textContent=g[0].replace("___","_____");p.className="badge";box.appendChild(p)})}document.getElementById("quizTitle").textContent=s.type==="boss"?"🐉 Boss Battle":s.type==="review"?"🧠 Cổng ôn tập":"🎯 Nhiệm vụ của Unit";window.scrollTo({top:0,behavior:"smooth"})}
 function makeWord(w){let d=document.createElement("div");d.className="word";let t=document.createElement("strong");t.textContent=w[0]+" — "+w[1]+" ";let btn=document.createElement("button");btn.className="btn light";btn.textContent="🔊 Nghe";btn.onclick=()=>say(w[0]);let ex=document.createElement("div");ex.className="example";ex.textContent=w[2];let tr=document.createElement("div");tr.className="translation";tr.textContent=w[3];d.append(t,btn,ex,tr);return d}
