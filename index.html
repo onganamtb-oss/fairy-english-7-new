@@ -474,6 +474,50 @@ function buildFairy3D(map,canvas){
     return g;
   }
   for(let i=0;i<21;i++)buildMiniCastle(i);
+  // Replace the placeholder primitives with actual textured GLB game assets (Kenney CC0).
+  // The procedural scene remains as a graceful fallback if a remote model cannot load.
+  (async function loadRealFairyAssets(){
+    try{
+      const mod=await import("https://esm.sh/three@0.160.0/examples/jsm/loaders/GLTFLoader.js");
+      const loader=new mod.GLTFLoader();
+      const base="https://hidencod.github.io/tge-assets/";
+      const assets=[
+        "packs/castle-kit/tower-square.glb",
+        "packs/nature-kit/tree-detailed.glb",
+        "packs/tower-defense-kit/tower-round-crystals.glb",
+        "packs/nature-kit/mushroom-redgroup.glb",
+        "packs/nature-kit/bridge-woodround.glb",
+        "packs/castle-kit/tower-hexagon-base.glb",
+        "packs/nature-kit/tree-default-dark.glb"
+      ];
+      const loaded=await Promise.all(assets.map(url=>new Promise(resolve=>{
+        loader.load(base+url,g=>resolve(g.scene),undefined,()=>resolve(null));
+      })));
+      const box3=new T.Box3(),size3=new T.Vector3(),center3=new T.Vector3();
+      for(let i=0;i<castleModels.length;i++){
+        const target=castleModels[i],asset=loaded[i%loaded.length];
+        if(!asset)continue;
+        // Keep the floating island and its magical halo; replace only the crude landmark.
+        const keep=[];
+        target.children.slice().forEach(child=>{
+          if(child.geometry&&child.geometry.type==="CylinderGeometry"&&child.position.y<0)keep.push(child);
+          else target.remove(child);
+        });
+        const model=asset.clone(true);
+        model.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true;if(o.material){o.material=Array.isArray(o.material)?o.material.map(m=>m.clone()):o.material.clone();}}});
+        box3.setFromObject(model);box3.getSize(size3);box3.getCenter(center3);
+        const maxDim=Math.max(size3.x,size3.y,size3.z)||1;
+        model.scale.setScalar(3.1/maxDim);
+        model.position.sub(center3.multiplyScalar(3.1/maxDim));
+        model.position.y+=.35;
+        // Distinct scale and orientation keep repeated asset types from feeling stamped out.
+        model.rotation.y=(i%4)*Math.PI*.5;
+        target.add(model);
+        target.userData.spin=(i%2?1:-1)*(.10+(i%3)*.025);
+        target.userData.realAsset=true;
+      }
+    }catch(err){console.warn("Fairy GLB assets unavailable; keeping fallback models.",err)}
+  })();
   // Enchanted atmosphere: individually animated motes and orbiting fairy lights.
   const magicMotes=[];
   const moteMaterials=[
