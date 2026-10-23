@@ -276,7 +276,7 @@ function isUnlocked(s){if(s.id==="review0")return true;if(s.type==="unit"){if(s.
 let fairy3DStarted=false, fairy3DRenderer=null, fairy3DScene=null, fairy3DCamera=null;
 function initialize3DWorld(map){
   let canvas=map.querySelector("#fairy3d-canvas");
-  if(!canvas){canvas=document.createElement("canvas");canvas.id="fairy3d-canvas";canvas.setAttribute("aria-label","Bản đồ thế giới 3D");map.prepend(canvas);}
+  if(!canvas){canvas=document.createElement("canvas");canvas.id="fairy3d-canvas";canvas.setAttribute("aria-label","Bản đồ thế giới 3D");map.appendChild(canvas);}
   canvas.style.cssText="position:absolute;inset:0;width:100%;height:100%;display:block;z-index:0;pointer-events:none";
   if(window.THREE){buildFairy3D(map,canvas);return}
   if(!document.getElementById("threejs-loader")){
