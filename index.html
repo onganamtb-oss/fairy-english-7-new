@@ -474,13 +474,28 @@ function buildFairy3D(map,canvas){
     return g;
   }
   for(let i=0;i<21;i++)buildMiniCastle(i);
-  const castleCamera=new T.PerspectiveCamera(34,1,.1,50);
+  // Enchanted atmosphere: individually animated motes and orbiting fairy lights.
+  const magicMotes=[];
+  const moteMaterials=[
+    new T.MeshBasicMaterial({color:0xffe9a8}),
+    new T.MeshBasicMaterial({color:0x9ff6ff}),
+    new T.MeshBasicMaterial({color:0xffb9ed}),
+    new T.MeshBasicMaterial({color:0xd8c4ff})
+  ];
+  for(let i=0;i<56;i++){
+    const mote=new T.Mesh(new T.SphereGeometry(.035+(i%4)*.012,7,6),moteMaterials[i%4]);
+    const a=i*2.39996,rad=1.25+(i%7)*.19;
+    mote.position.set(Math.cos(a)*rad,.3+(i%11)*.24,Math.sin(a)*rad);
+    mote.userData={a,rad,baseY:mote.position.y,speed:.45+(i%5)*.12,phase:i*.73};
+    castleScene.add(mote);magicMotes.push(mote);
+  }
+  const castleCamera=new T.PerspectiveCamera(31,1,.1,50);
   castleCamera.position.set(6.5,6.0,8.5);castleCamera.lookAt(0,1.2,0);
   const castleButtons=()=>Array.from(map.querySelectorAll(".realm"));
   const modelStyle=document.getElementById("fairy-castle-style");
   if(!modelStyle){
     const st=document.createElement("style");st.id="fairy-castle-style";
-    st.textContent="#map .realm{background:transparent!important;border:0!important;box-shadow:none!important;backdrop-filter:none!important;overflow:visible!important}#map .realm .icon{display:block;width:100%!important;height:94px!important;margin:0 auto 4px!important;background:transparent!important;border:0!important;box-shadow:none!important;font-size:0!important;filter:none!important;position:relative;z-index:1}#map .realm strong,#map .realm small{position:relative;z-index:4}#map .realm.boss strong{background:linear-gradient(#7845a0,#4e326f)!important;color:#fff!important}#map .realm:before{display:none!important}@media(max-width:650px){#map .realm .icon{height:91px!important;margin-bottom:2px!important}}";
+    st.textContent="#map .realm{background:linear-gradient(180deg,#ffffff0a,#ffffff20)!important;border:1px solid #fff9!important;box-shadow:0 12px 28px #2c185b30,inset 0 1px 0 #ffffffa8!important;backdrop-filter:blur(5px)!important;overflow:visible!important;border-radius:24px!important;padding:10px 8px 14px!important;transition:transform .25s ease,filter .25s ease!important}#map .realm .icon{display:block;width:100%!important;height:150px!important;margin:0 auto 3px!important;background:transparent!important;border:0!important;box-shadow:none!important;font-size:0!important;filter:drop-shadow(0 12px 10px #2c185b42)!important;position:relative;z-index:1}#map .realm strong,#map .realm small{position:relative;z-index:4;text-shadow:0 1px 0 #fff9}#map .realm strong{font-size:14px!important;color:#35205f!important}#map .realm small{font-size:10px!important;color:#51416d!important}#map .realm.boss{background:linear-gradient(145deg,#6745a9b8,#b66fc6b8)!important;border-color:#ffe5ff!important}#map .realm.boss strong,#map .realm.boss small{color:#fff!important;text-shadow:0 2px 4px #24113d!important}#map .realm.done{background:linear-gradient(145deg,#d8fff0b8,#fff8dcb8)!important}#map .realm.locked{filter:saturate(.78) brightness(.92)!important}#map .realm:before{display:none!important}#map .realm:hover:not(:disabled){transform:translateY(-7px) scale(1.035)!important;filter:brightness(1.08)!important;box-shadow:0 18px 34px #2c185b45,inset 0 1px 0 #ffffffc9!important}@media(max-width:650px){#map .realm{padding:7px 4px 10px!important;border-radius:19px!important}#map .realm .icon{height:125px!important;margin-bottom:2px!important}#map .realm strong{font-size:11px!important}#map .realm small{font-size:9px!important}}";
     document.head.appendChild(st);
   }
 
@@ -503,6 +518,13 @@ function buildFairy3D(map,canvas){
     if(!map.isConnected)return;
     map._fairyAnim=requestAnimationFrame(tick);
     const now=performance.now()*.001;
+    for(const mote of magicMotes){
+      const d=mote.userData,angle=d.a+now*d.speed;
+      mote.position.x=Math.cos(angle)*d.rad;
+      mote.position.z=Math.sin(angle)*d.rad;
+      mote.position.y=d.baseY+Math.sin(now*1.8+d.phase)*.16;
+      mote.scale.setScalar(.72+.35*(.5+.5*Math.sin(now*3+d.phase)));
+    }
     // Draw the explorable world first, then render a separate perspective 3D castle inside every lesson landmark.
     fairy3DRenderer.setScissorTest(false);
     fairy3DRenderer.setViewport(0,0,map.clientWidth,map.clientHeight);
