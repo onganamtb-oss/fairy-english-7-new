@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="fairy-build" content="FAIRY_ENCHANTED_WORLD_MAP_V6_20261023">
+<meta name="fairy-build" content="FAIRY_INDIVIDUAL_3D_CASTLES_V7_20261023">
 <script>/* FAIRY_FORCE_REFRESH_20261023: clear stale offline workers and caches */if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.getRegistrations().then(function(rs){rs.forEach(function(r){r.unregister()})}).catch(function(){});if("caches" in window)caches.keys().then(function(ks){ks.filter(function(k){return k.indexOf("fairy-english-7-")===0}).forEach(function(k){caches.delete(k)})}).catch(function(){})})}</script>
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" href="./icon.svg" type="image/svg+xml">
@@ -372,6 +372,74 @@ function buildFairy3D(map,canvas){
   const cloudMat=new T.MeshStandardMaterial({color:"#ffffff",roughness:1});
   for(const [x,y,z] of [[-9,10,-12],[-5,11,0],[8,12,9]])for(let j=0;j<3;j++)mesh(new T.SphereGeometry(1.05-j*.1,10,7),cloudMat,x+j*.7,y+(j%2)*.35,z,false);
   mesh(new T.SphereGeometry(1.25,18,12),mat("#fff0a4"),9,10,-20,false);
+  // INDEPENDENT 3D CASTLES: each learning stop gets a real mesh model rendered in its own viewport.
+  const castleScene=new T.Scene();
+  castleScene.add(new T.HemisphereLight(0xeaf8ff,0x58466e,2.0));
+  const castleSun=new T.DirectionalLight(0xffedc2,3.0);castleSun.position.set(-4,9,7);castleScene.add(castleSun);
+  const castleFill=new T.PointLight(0x79dfff,2.0,18);castleFill.position.set(2,4,4);castleScene.add(castleFill);
+  const castleMats={
+    ivory:new T.MeshStandardMaterial({color:"#fff0cf",roughness:.62}),
+    pink:new T.MeshStandardMaterial({color:"#f2a8d7",roughness:.5}),
+    lilac:new T.MeshStandardMaterial({color:"#8e66d1",roughness:.48}),
+    gold:new T.MeshStandardMaterial({color:"#ffd66b",metalness:.22,roughness:.38}),
+    blue:new T.MeshStandardMaterial({color:"#63d9f3",emissive:"#1683b7",emissiveIntensity:.65,roughness:.25}),
+    dark:new T.MeshStandardMaterial({color:"#44315f",roughness:.8}),
+    green:new T.MeshStandardMaterial({color:"#5dbb91",roughness:.8})
+  };
+  const castleModels=[];
+  function castlePart(g,geo,ma,x,y,z,rx=0,ry=0,rz=0){
+    const o=new T.Mesh(geo,ma);o.position.set(x,y,z);o.rotation.set(rx,ry,rz);o.castShadow=true;o.receiveShadow=true;g.add(o);return o;
+  }
+  function buildMiniCastle(index){
+    const g=new T.Group();castleScene.add(g);
+    const roofMats=[castleMats.lilac,castleMats.pink,castleMats.gold,castleMats.blue];
+    const rm=roofMats[index%roofMats.length];
+    // floating rock plinth, garden terrace and the castle's actual walls
+    castlePart(g,new T.CylinderGeometry(2.65,2.05,.62,8),castleMats.dark,0,-.35,0,0,.18,0);
+    castlePart(g,new T.CylinderGeometry(2.58,2.58,.16,10),castleMats.green,0,.03,0);
+    castlePart(g,new T.BoxGeometry(2.8,1.15,2.05),castleMats.ivory,0,.66,0);
+    castlePart(g,new T.BoxGeometry(.16,1.12,.09),castleMats.pink,1.39,.66,.99);
+    // raised central keep and stepped roofs
+    castlePart(g,new T.BoxGeometry(1.28,1.7,1.18),castleMats.ivory,0,1.95,-.12);
+    castlePart(g,new T.BoxGeometry(1.32,.12,1.22),castleMats.gold,0,2.82,-.12);
+    castlePart(g,new T.ConeGeometry(.98,1.35,6),rm,0,3.53,-.12,0,.18,0);
+    // four tall towers, ringed parapets, pointed roofs and finials
+    for(const [x,z,h] of [[-1.18,-.82,2.45],[1.18,-.82,2.25],[-1.18,.82,2.05],[1.18,.82,2.4]]){
+      castlePart(g,new T.CylinderGeometry(.42,.5,h,8),castleMats.ivory,x,h/2+.12,z);
+      castlePart(g,new T.CylinderGeometry(.49,.49,.18,8),castleMats.gold,x,h+.14,z);
+      castlePart(g,new T.ConeGeometry(.61,1.12,7),rm,x,h+.78,z,0,.16,0);
+      castlePart(g,new T.SphereGeometry(.09,8,6),castleMats.gold,x,h+1.37,z);
+      // luminous windows on the visible front face
+      castlePart(g,new T.BoxGeometry(.13,.32,.045),castleMats.blue,x-.08,.72,z+.47);
+      castlePart(g,new T.BoxGeometry(.13,.32,.045),castleMats.blue,x+.12,1.22,z+.47);
+    }
+    // arched main gate, balcony, tiny bridge and floating magical crystal
+    castlePart(g,new T.BoxGeometry(.55,.8,.12),castleMats.dark,0,.48,1.08);
+    castlePart(g,new T.TorusGeometry(.3,.085,7,14,Math.PI),castleMats.gold,0,.87,1.1,0,0,Math.PI);
+    castlePart(g,new T.BoxGeometry(1.1,.12,.55),castleMats.gold,0,1.48,1.18);
+    for(const x of [-.42,.42])castlePart(g,new T.CylinderGeometry(.06,.08,.32,6),castleMats.ivory,x,1.68,1.18);
+    const crystal=castlePart(g,new T.OctahedronGeometry(.22),castleMats.blue,0,3.12,1.1,0,0,.2);
+    crystal.userData.float=true;
+    // little pennants make the silhouette feel like a fantasy game landmark
+    for(const [x,z] of [[-1.18,-.82],[1.18,-.82],[0,-.12]]){
+      castlePart(g,new T.CylinderGeometry(.025,.025,.65,5),castleMats.gold,x,3.0,z);
+      castlePart(g,new T.ConeGeometry(.16,.34,3),index%2?castleMats.pink:castleMats.gold,x,3.12,z,0,0,Math.PI/2);
+    }
+    g.userData.spin=(index%2?1:-1)*(.18+(index%4)*.035);
+    castleModels.push(g);
+    return g;
+  }
+  for(let i=0;i<21;i++)buildMiniCastle(i);
+  const castleCamera=new T.PerspectiveCamera(34,1,.1,50);
+  castleCamera.position.set(6.5,6.0,8.5);castleCamera.lookAt(0,1.2,0);
+  const castleButtons=()=>Array.from(map.querySelectorAll(".realm"));
+  const modelStyle=document.getElementById("fairy-castle-style");
+  if(!modelStyle){
+    const st=document.createElement("style");st.id="fairy-castle-style";
+    st.textContent="#map .realm{background:transparent!important;border:0!important;box-shadow:none!important;backdrop-filter:none!important;overflow:visible!important}#map .realm .icon{display:block;width:100%!important;height:94px!important;margin:0 auto 4px!important;background:transparent!important;border:0!important;box-shadow:none!important;font-size:0!important;filter:none!important;position:relative;z-index:1}#map .realm strong,#map .realm small{position:relative;z-index:4}#map .realm.boss strong{background:linear-gradient(#7845a0,#4e326f)!important;color:#fff!important}#map .realm:before{display:none!important}@media(max-width:650px){#map .realm .icon{height:91px!important;margin-bottom:2px!important}}";
+    document.head.appendChild(st);
+  }
+
   // render with stable resize and light idle animation
   const resize=()=>{if(!map.isConnected||!fairy3DRenderer)return;const nw=Math.max(320,map.clientWidth),nh=Math.max(900,map.clientHeight),aspect=nw/nh;fairy3DCamera.left=-13;fairy3DCamera.right=13;fairy3DCamera.top=13/aspect;fairy3DCamera.bottom=-13/aspect;fairy3DCamera.updateProjectionMatrix();fairy3DRenderer.setSize(nw,nh,false);};
   resize();if(window.ResizeObserver){if(map._fairyRO)map._fairyRO.disconnect();map._fairyRO=new ResizeObserver(resize);map._fairyRO.observe(map);}
@@ -387,11 +455,40 @@ function buildFairy3D(map,canvas){
   map._fairyOrbitHandlers=[["pointerdown",down],["pointermove",move,{passive:false}],["pointerup",up],["pointercancel",up],["wheel",wheel,{passive:false}]];
   let controls=map.querySelector(".orbit-controls");if(!controls){controls=document.createElement("div");controls.className="orbit-controls";controls.innerHTML='<span>🖱️ KÉO ĐỂ XOAY 360°</span><span>Cuộn để phóng to/thu nhỏ</span><button type="button" aria-label="Đặt lại góc nhìn">↻ Góc nhìn ban đầu</button>';map.appendChild(controls);controls.querySelector("button").addEventListener("click",e=>{e.stopPropagation();reset()})}
   if(map._fairyAnim)cancelAnimationFrame(map._fairyAnim);
-  const tick=()=>{if(!map.isConnected)return;map._fairyAnim=requestAnimationFrame(tick);fairy3DRenderer.render(fairy3DScene,fairy3DCamera);};
+  const tick=()=>{
+    if(!map.isConnected)return;
+    map._fairyAnim=requestAnimationFrame(tick);
+    const now=performance.now()*.001;
+    // Draw the explorable world first, then render a separate perspective 3D castle inside every lesson landmark.
+    fairy3DRenderer.setScissorTest(false);
+    fairy3DRenderer.setViewport(0,0,Math.round(map.clientWidth*Math.min(window.devicePixelRatio||1,1.7)),Math.round(map.clientHeight*Math.min(window.devicePixelRatio||1,1.7)));
+    fairy3DRenderer.render(fairy3DScene,fairy3DCamera);
+    const mapRect=map.getBoundingClientRect(),pr=Math.min(window.devicePixelRatio||1,1.7);
+    const buttons=castleButtons();
+    fairy3DRenderer.autoClear=false;
+    fairy3DRenderer.setScissorTest(true);
+    for(let i=0;i<buttons.length&&i<castleModels.length;i++){
+      const b=buttons[i],r=b.getBoundingClientRect();
+      const left=Math.max(0,r.left-mapRect.left+2),right=Math.min(mapRect.width,r.right-mapRect.left-2);
+      const top=Math.max(0,r.top-mapRect.top+1),bottom=Math.min(mapRect.height,r.top-mapRect.top+Math.min(102,r.height*.67));
+      if(right<=left||bottom<=top)continue;
+      const x=Math.round(left*pr),y=Math.round((mapRect.height-bottom)*pr),ww=Math.max(1,Math.round((right-left)*pr)),hh=Math.max(1,Math.round((bottom-top)*pr));
+      fairy3DRenderer.setViewport(x,y,ww,hh);fairy3DRenderer.setScissor(x,y,ww,hh);
+      fairy3DRenderer.clearDepth();
+      for(let j=0;j<castleModels.length;j++)castleModels[j].visible=(j===i);
+      const model=castleModels[i];model.rotation.y+=model.userData.spin*.012;
+      model.position.y=.05*Math.sin(now*1.4+i*.7);
+      model.traverse(o=>{if(o.userData.float)o.rotation.y=now*.7;});
+      castleCamera.aspect=ww/hh;castleCamera.updateProjectionMatrix();
+      fairy3DRenderer.render(castleScene,castleCamera);
+    }
+    for(const m of castleModels)m.visible=false;
+    fairy3DRenderer.setScissorTest(false);fairy3DRenderer.autoClear=true;
+  };
   tick();
 }
 
-function renderMap(){let map=document.getElementById("map");map.innerHTML="";stages.forEach(s=>{let b=document.createElement("button");let locked=!isUnlocked(s);b.className="realm "+(s.type==="boss"?"boss":s.type==="review"?"review":"")+(state.done.includes(s.id)?" done":"")+(locked?" locked":"");b.innerHTML='<span class="icon">'+s.icon+'</span><strong>'+s.name+'</strong><small>'+(state.done.includes(s.id)?"✓ Đã hoàn thành":locked?"🔒 Khóa":"Chạm để khám phá")+'</small>';b.disabled=locked;b.onclick=()=>openStage(s);map.appendChild(b)});initialize3DWorld(map);updateStats()}
+function renderMap(){let map=document.getElementById("map");map.innerHTML="";stages.forEach(s=>{let b=document.createElement("button");let locked=!isUnlocked(s);b.className="realm "+(s.type==="boss"?"boss":s.type==="review"?"review":"")+(state.done.includes(s.id)?" done":"")+(locked?" locked":"");b.innerHTML='<span class="icon" aria-hidden="true"></span><strong>'+s.name+'</strong><small>'+(state.done.includes(s.id)?"✓ Đã hoàn thành":locked?"🔒 Khóa":"Chạm để khám phá")+'</small>';b.disabled=locked;b.onclick=()=>openStage(s);map.appendChild(b)});initialize3DWorld(map);updateStats()}
 function goHome(){document.getElementById("home").style.display="block";document.getElementById("lesson").style.display="none";renderMap();window.scrollTo({top:0,behavior:"smooth"})}
 function openStage(s){if(!isUnlocked(s))return;current=s;document.getElementById("home").style.display="none";document.getElementById("lesson").style.display="block";document.getElementById("sceneIcon").textContent=s.icon;document.getElementById("sceneHeading").textContent=s.type==="boss"?"Đại chiến phép thuật":s.name;document.getElementById("sceneSub").textContent=s.type==="unit"?units[s.unit].story[0]:s.type==="boss"?"Trả lời đúng để làm suy yếu Chúa tể Bóng tối!":"Ôn lại kiến thức và thu thập năng lượng.";document.getElementById("title").textContent=s.name+" — "+s.vi;document.getElementById("desc").textContent=s.type==="unit"?"Học từ vựng, nghe phát âm, xem câu chuyện và hoàn thành nhiệm vụ. Hệ thống cũng đưa kiến thức các Unit trước trở lại để bạn ghi nhớ lâu hơn.":s.type==="boss"?"Đây là trận chiến tổng hợp. Mỗi câu trả lời đúng làm giảm năng lượng của trùm. Bạn cần đạt ít nhất 70% để chiến thắng.":"Ôn từ vựng và cấu trúc trong các Unit thuộc chặng này.";document.getElementById("quiz").style.display="none";document.getElementById("result").style.display="none";document.getElementById("actions").style.display="block";document.getElementById("lessonContent").style.display="block";let gate=document.getElementById("gate");gate.innerHTML="";if(s.type==="unit"&&s.unit>0){let p=document.createElement("p");p.className="badge";p.textContent="🔁 Cổng ôn bài cũ: có câu hỏi từ Unit "+Math.max(1,s.unit-1)+" trước khi vào bài mới.";gate.appendChild(p)}let box=document.getElementById("lessonContent");box.innerHTML="";let wordList=getWords(s);let h=document.createElement("h3");h.textContent="📚 Từ vựng trong vùng đất";box.appendChild(h);wordList.slice(0,12).forEach(w=>box.appendChild(makeWord(w)));if(s.type==="unit"){let st=units[s.unit].story;let sh=document.createElement("h3");sh.textContent="🎞️ Câu chuyện";box.appendChild(sh);let p=document.createElement("p");p.textContent=st[0];box.appendChild(p);let en=document.createElement("p");en.innerHTML="<b>"+st[1]+"</b><br><span class='translation'>"+st[2]+"</span>";box.appendChild(en);let link=document.createElement("a");link.href=s.unit===0?"./unit1.html":"./unit.html?u="+(s.unit+1);link.className="btn gold";link.style.display="inline-block";link.style.textDecoration="none";link.textContent="🎞️ Bắt đầu phim và bài học Unit "+(s.unit+1);box.appendChild(link);let gh=document.createElement("h3");gh.textContent="✨ Luyện phép thuật ngữ pháp";box.appendChild(gh);units[s.unit].grammar.forEach(g=>{let p=document.createElement("p");p.textContent=g[0].replace("___","_____");p.className="badge";box.appendChild(p)})}document.getElementById("quizTitle").textContent=s.type==="boss"?"🐉 Boss Battle":s.type==="review"?"🧠 Cổng ôn tập":"🎯 Nhiệm vụ của Unit";window.scrollTo({top:0,behavior:"smooth"})}
 function makeWord(w){let d=document.createElement("div");d.className="word";let t=document.createElement("strong");t.textContent=w[0]+" — "+w[1]+" ";let btn=document.createElement("button");btn.className="btn light";btn.textContent="🔊 Nghe";btn.onclick=()=>say(w[0]);let ex=document.createElement("div");ex.className="example";ex.textContent=w[2];let tr=document.createElement("div");tr.className="translation";tr.textContent=w[3];d.append(t,btn,ex,tr);return d}
