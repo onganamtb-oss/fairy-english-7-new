@@ -231,6 +231,15 @@ background-size:100% 100%;background-repeat:no-repeat}
 #map:before{z-index:6!important}
 @media(max-width:650px){#map{min-height:2300px!important}}
 
+
+/* 360 ORBIT CAMERA CONTROLS */
+#map{touch-action:pan-y;cursor:grab}
+#map.orbit-dragging{cursor:grabbing;user-select:none}
+#map .orbit-controls{position:sticky;top:10px;z-index:8;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;width:max-content;max-width:calc(100% - 24px);margin:12px auto 0;padding:8px 12px;border:1px solid #fff2c1;border-radius:999px;background:linear-gradient(135deg,#39276bef,#7540a7ef);color:#fff;font-size:11px;font-weight:900;box-shadow:0 4px 16px #1e153b66;pointer-events:auto}
+#map .orbit-controls button{border:1px solid #ffe9a6;border-radius:999px;padding:5px 9px;background:#ffe9a6;color:#35205f;font:inherit;cursor:pointer}
+#map .realm{touch-action:manipulation}
+@media(max-width:650px){#map .orbit-controls{font-size:9px;gap:5px;padding:7px 8px}#map .orbit-controls span:nth-child(2){display:none}}
+
 </style>
 </head>
 <body>
@@ -293,7 +302,7 @@ function buildFairy3D(map,canvas){
   const w=Math.max(320,map.clientWidth),h=Math.max(900,map.clientHeight);
   fairy3DScene=new T.Scene();fairy3DScene.background=new T.Color("#a9dff5");fairy3DScene.fog=new T.Fog("#a9dff5",36,90);
   fairy3DCamera=new T.OrthographicCamera(-13,13,13*h/w,-13*h/w,.1,150);
-  fairy3DCamera.position.set(22,30,30);fairy3DCamera.lookAt(0,0,0);
+  const orbitTarget=new T.Vector3(0,0,0);let orbitAzimuth=Math.atan2(22,30),orbitElevation=.64,orbitRadius=44;function applyOrbit(){const ce=Math.cos(orbitElevation);fairy3DCamera.position.set(orbitTarget.x+orbitRadius*ce*Math.sin(orbitAzimuth),orbitTarget.y+orbitRadius*Math.sin(orbitElevation),orbitTarget.z+orbitRadius*ce*Math.cos(orbitAzimuth));fairy3DCamera.lookAt(orbitTarget);fairy3DCamera.updateProjectionMatrix()}applyOrbit();
   fairy3DRenderer=new T.WebGLRenderer({canvas,antialias:true,alpha:false});
   fairy3DRenderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.7));fairy3DRenderer.setSize(w,h,false);
   fairy3DRenderer.shadowMap.enabled=true;fairy3DRenderer.shadowMap.type=T.PCFSoftShadowMap;
@@ -365,7 +374,18 @@ function buildFairy3D(map,canvas){
   mesh(new T.SphereGeometry(1.25,18,12),mat("#fff0a4"),9,10,-20,false);
   // render with stable resize and light idle animation
   const resize=()=>{if(!map.isConnected||!fairy3DRenderer)return;const nw=Math.max(320,map.clientWidth),nh=Math.max(900,map.clientHeight),aspect=nw/nh;fairy3DCamera.left=-13;fairy3DCamera.right=13;fairy3DCamera.top=13/aspect;fairy3DCamera.bottom=-13/aspect;fairy3DCamera.updateProjectionMatrix();fairy3DRenderer.setSize(nw,nh,false);};
-  resize();if(window.ResizeObserver){if(map._fairyRO)map._fairyRO.disconnect();map._fairyRO=new ResizeObserver(resize);map._fairyRO.observe(map);}
+  resize();if(window.ResizeObserver){if(map._fairyRO)map._fairyRO.disconnect();map._fairyRO=new ResizeObserver(resize);map._fairyRO=new ResizeObserver(resize);map._fairyRO.observe(map);}
+  // 360-degree orbit camera: drag to rotate and wheel to zoom.
+  if(map._fairyOrbitHandlers){for(const [ev,fn,opt] of map._fairyOrbitHandlers)map.removeEventListener(ev,fn,opt)}
+  let dragging=false,lastX=0,lastY=0,dragPointer=null;
+  const down=e=>{if(e.target.closest&&e.target.closest(".realm,button,a,input,select,textarea"))return;if(e.pointerType==="mouse"&&e.button!==0)return;dragging=true;dragPointer=e.pointerId;lastX=e.clientX;lastY=e.clientY;map.classList.add("orbit-dragging");if(map.setPointerCapture&&e.pointerId!=null)try{map.setPointerCapture(e.pointerId)}catch(_){}};
+  const move=e=>{if(!dragging)return;const dx=e.clientX-lastX,dy=e.clientY-lastY;lastX=e.clientX;lastY=e.clientY;orbitAzimuth-=dx*.008;orbitElevation=Math.max(.12,Math.min(1.28,orbitElevation+dy*.006));applyOrbit();if(e.cancelable)e.preventDefault()};
+  const up=e=>{if(!dragging)return;dragging=false;map.classList.remove("orbit-dragging");if(map.releasePointerCapture&&dragPointer!=null)try{map.releasePointerCapture(dragPointer)}catch(_){}dragPointer=null};
+  const wheel=e=>{if(e.target.closest&&e.target.closest(".realm"))return;orbitRadius=Math.max(27,Math.min(68,orbitRadius+e.deltaY*.035));applyOrbit();if(e.cancelable)e.preventDefault()};
+  const reset=()=>{orbitAzimuth=Math.atan2(22,30);orbitElevation=.64;orbitRadius=44;applyOrbit()};
+  map.addEventListener("pointerdown",down);map.addEventListener("pointermove",move,{passive:false});map.addEventListener("pointerup",up);map.addEventListener("pointercancel",up);map.addEventListener("wheel",wheel,{passive:false});
+  map._fairyOrbitHandlers=[["pointerdown",down],["pointermove",move,{passive:false}],["pointerup",up],["pointercancel",up],["wheel",wheel,{passive:false}]];
+  let controls=map.querySelector(".orbit-controls");if(!controls){controls=document.createElement("div");controls.className="orbit-controls";controls.innerHTML='<span>🖱️ KÉO ĐỂ XOAY 360°</span><span>Cuộn để phóng to/thu nhỏ</span><button type="button" aria-label="Đặt lại góc nhìn">↻ Góc nhìn ban đầu</button>';map.appendChild(controls);controls.querySelector("button").addEventListener("click",e=>{e.stopPropagation();reset()})}
   if(map._fairyAnim)cancelAnimationFrame(map._fairyAnim);
   const tick=()=>{if(!map.isConnected)return;map._fairyAnim=requestAnimationFrame(tick);fairy3DRenderer.render(fairy3DScene,fairy3DCamera);};
   tick();
