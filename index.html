@@ -374,7 +374,7 @@ function buildFairy3D(map,canvas){
   mesh(new T.SphereGeometry(1.25,18,12),mat("#fff0a4"),9,10,-20,false);
   // render with stable resize and light idle animation
   const resize=()=>{if(!map.isConnected||!fairy3DRenderer)return;const nw=Math.max(320,map.clientWidth),nh=Math.max(900,map.clientHeight),aspect=nw/nh;fairy3DCamera.left=-13;fairy3DCamera.right=13;fairy3DCamera.top=13/aspect;fairy3DCamera.bottom=-13/aspect;fairy3DCamera.updateProjectionMatrix();fairy3DRenderer.setSize(nw,nh,false);};
-  resize();if(window.ResizeObserver){if(map._fairyRO)map._fairyRO.disconnect();map._fairyRO=new ResizeObserver(resize);map._fairyRO=new ResizeObserver(resize);map._fairyRO.observe(map);}
+  resize();if(window.ResizeObserver){if(map._fairyRO)map._fairyRO.disconnect();map._fairyRO=new ResizeObserver(resize);map._fairyRO.observe(map);}
   // 360-degree orbit camera: drag to rotate and wheel to zoom.
   if(map._fairyOrbitHandlers){for(const [ev,fn,opt] of map._fairyOrbitHandlers)map.removeEventListener(ev,fn,opt)}
   let dragging=false,lastX=0,lastY=0,dragPointer=null;
