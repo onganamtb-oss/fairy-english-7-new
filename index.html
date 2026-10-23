@@ -222,6 +222,15 @@ background-size:100% 100%;background-repeat:no-repeat}
  #map .realm:nth-child(21){left:30%;top:87%;width:40%}
 }
 
+
+/* REAL 3D CANVAS OVERRIDES — rendered geometry, angled orthographic camera */
+#map{background:#9eddf3!important;isolation:isolate;min-height:1700px!important}
+#map #fairy3d-canvas{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;z-index:0!important}
+#map:after{display:none!important}
+#map .realm{z-index:3!important}
+#map:before{z-index:6!important}
+@media(max-width:650px){#map{min-height:2300px!important}}
+
 </style>
 </head>
 <body>
@@ -262,58 +271,107 @@ function persist(){try{localStorage.setItem("fairy7save",JSON.stringify(state))}
 function rank(){return state.xp>=1200?"Đại pháp sư":state.xp>=600?"Hiệp sĩ pha lê":state.xp>=250?"Nhà thám hiểm":state.xp>=60?"Học viên phép thuật":"Tân thủ"}
 function updateStats(){document.getElementById("xp").textContent=state.xp;document.getElementById("coins").textContent=state.coins;document.getElementById("rank").textContent=rank();document.getElementById("crystals").textContent=state.crystals.length;document.getElementById("progress").style.width=(state.done.length/stages.length*100)+"%";document.getElementById("progressText").textContent=state.done.length+" / "+stages.length+" chặng đã hoàn thành";document.getElementById("inventory").textContent=state.inventory.length?state.inventory.join(" · "):"Chưa có vật phẩm. Hãy hoàn thành nhiệm vụ đầu tiên!"}
 function isUnlocked(s){if(s.id==="review0")return true;if(s.type==="unit"){if(s.unit===0)return true;if(s.unit===6)return state.done.includes("u6")&&state.done.includes("final1");return state.done.includes("u"+s.unit)}if(s.id==="r1")return [1,2,3].every(n=>state.done.includes("u"+n));if(s.id==="mid1")return state.done.includes("r1");if(s.id==="r2")return [4,5,6].every(n=>state.done.includes("u"+n));if(s.id==="final1")return state.done.includes("mid1")&&state.done.includes("r2");if(s.id==="r3")return [7,8,9].every(n=>state.done.includes("u"+n));if(s.id==="mid2")return state.done.includes("r3");if(s.id==="r4")return [10,11,12].every(n=>state.done.includes("u"+n));if(s.id==="final2")return state.done.includes("final1")&&state.done.includes("mid2")&&state.done.includes("r4");return true}
-function renderMap(){let map=document.getElementById("map");map.innerHTML="";stages.forEach(s=>{let b=document.createElement("button");let locked=!isUnlocked(s);b.className="realm "+(s.type==="boss"?"boss":s.type==="review"?"review":"")+(state.done.includes(s.id)?" done":"")+(locked?" locked":"");b.innerHTML='<span class="icon">'+s.icon+'</span><strong>'+s.name+'</strong><small>'+(state.done.includes(s.id)?"✓ Đã hoàn thành":locked?"🔒 Khóa":"Chạm để khám phá")+'</small>';b.disabled=locked;b.onclick=()=>openStage(s);map.appendChild(b)});map.insertAdjacentHTML("beforeend",`<svg class="world-art" viewBox="0 0 1000 1300" preserveAspectRatio="none" aria-hidden="true">
-<defs>
- <linearGradient id="skyland" x2="0" y2="1"><stop stop-color="#b7eaff"/><stop offset=".48" stop-color="#c9f0d0"/><stop offset="1" stop-color="#79c982"/></linearGradient>
- <linearGradient id="hill3d" x2=".2" y2="1"><stop stop-color="#c8f0a1"/><stop offset="1" stop-color="#69b96e"/></linearGradient>
- <linearGradient id="cliff3d" x2="0" y2="1"><stop stop-color="#e4bd79"/><stop offset="1" stop-color="#9c684d"/></linearGradient>
- <linearGradient id="water3d" x2="0" y2="1"><stop stop-color="#8ce7ff"/><stop offset="1" stop-color="#3199dc"/></linearGradient>
- <linearGradient id="castle3d" x2="1" y2="1"><stop stop-color="#fff2c9"/><stop offset="1" stop-color="#dca9b4"/></linearGradient>
- <filter id="shadow3d" x="-30%" y="-30%" width="160%" height="170%"><feDropShadow dx="0" dy="13" stdDeviation="10" flood-color="#315c56" flood-opacity=".35"/></filter>
- <g id="pine"><path d="M0 48 20 4 40 48Z" fill="#27795a"/><path d="M20 4 40 48 20 39Z" fill="#56b979"/><path d="M4 32 20 -8 36 32Z" fill="#398e62"/><path d="M20 -8 36 32 20 24Z" fill="#7ad18a"/><path d="M16 46h8v16h-8Z" fill="#8b624a"/></g>
-</defs>
-<rect width="1000" height="1300" fill="url(#skyland)"/>
-<circle cx="825" cy="100" r="46" fill="#fff5ad" opacity=".95"/><circle cx="825" cy="100" r="65" fill="#fff5ad" opacity=".22"/>
-<g fill="#fff" opacity=".8"><ellipse cx="125" cy="100" rx="55" ry="18"/><circle cx="150" cy="86" r="28"/><circle cx="181" cy="103" r="22"/><ellipse cx="895" cy="260" rx="52" ry="16"/><circle cx="870" cy="247" r="24"/><circle cx="922" cy="248" r="29"/></g>
-<!-- layered distant mountains -->
-<path d="M0 270 105 130 180 230 300 70 405 230 520 105 645 250 755 95 900 245 1000 150V470H0Z" fill="#9eb9cf"/>
-<path d="M105 130 180 230 143 209 126 214Z M300 70 405 230 354 191 328 199Z M520 105 645 250 590 213 557 220Z M755 95 900 245 842 211 796 220Z" fill="#f5fbff"/>
-<path d="M0 320Q150 220 270 320T520 310T760 300T1000 275V620H0Z" fill="#8ccf9b"/>
-<path d="M0 425Q180 315 340 430T650 410T1000 390V780H0Z" fill="#65bd7e"/>
-<!-- rolling foreground hills -->
-<path d="M0 680Q130 570 260 680T530 650T800 670T1000 620V1300H0Z" fill="url(#hill3d)"/>
-<path d="M0 930Q170 820 330 940T650 910T1000 900V1300H0Z" fill="#83d17f"/>
-<!-- winding blue river -->
-<path d="M-40 330C150 370 220 500 370 470S590 330 690 500 790 730 680 800 420 810 350 940 470 1120 700 1150 910 1210 1040 1280" fill="none" stroke="#4d9e69" stroke-width="105" opacity=".35"/>
-<path d="M-40 320C150 360 220 490 370 460S590 320 690 490 790 720 680 790 420 800 350 930 470 1110 700 1140 910 1200 1040 1270" fill="none" stroke="url(#water3d)" stroke-width="78"/>
-<path d="M-40 300C150 340 220 470 370 440S590 300 690 470 790 700 680 770 420 780 350 910 470 1090 700 1120 910 1180 1040 1250" fill="none" stroke="#d3faff" stroke-width="8" stroke-dasharray="20 22" opacity=".8"/>
-<!-- magical stone road -->
-<path d="M75 180C260 95 350 260 540 190S810 130 850 310 650 420 480 390 170 490 145 620 400 730 590 680 860 740 840 860 570 970 390 930 160 1030 210 1150 520 1210 790 1150" fill="none" stroke="#8a7258" stroke-width="48" stroke-linecap="round"/>
-<path d="M75 180C260 95 350 260 540 190S810 130 850 310 650 420 480 390 170 490 145 620 400 730 590 680 860 740 840 860 570 970 390 930 160 1030 210 1150 520 1210 790 1150" fill="none" stroke="#ffe3a1" stroke-width="36" stroke-linecap="round" stroke-dasharray="4 10"/>
-<!-- floating island shadows and 3D cliffs -->
-<g filter="url(#shadow3d)">
- <path d="M360 210 480 150 600 210 480 270Z" fill="#e9d39a"/><path d="M360 210 480 270 480 315 390 270Z" fill="url(#cliff3d)"/><path d="M480 270 600 210 570 270 480 315Z" fill="#a87555"/><path d="M390 205 480 165 570 205 480 248Z" fill="#8edb8c"/>
- <path d="M620 515 730 460 840 515 730 570Z" fill="#e9d39a"/><path d="M620 515 730 570 730 610 650 570Z" fill="url(#cliff3d)"/><path d="M730 570 840 515 820 565 730 610Z" fill="#a87555"/><path d="M650 510 730 475 810 510 730 548Z" fill="#a1e28b"/>
- <path d="M110 790 215 735 320 790 215 845Z" fill="#e9d39a"/><path d="M110 790 215 845 215 885 135 845Z" fill="url(#cliff3d)"/><path d="M215 845 320 790 300 840 215 885Z" fill="#a87555"/><path d="M135 785 215 750 295 785 215 823Z" fill="#9cdd83"/>
-</g>
-<!-- castle: layered 3D towers, roof facets, windows -->
-<g transform="translate(470 105)" filter="url(#shadow3d)">
- <path d="M-80 95 0 55 86 95 0 137Z" fill="#a889bd"/><path d="M-80 95 0 137 0 210-80 168Z" fill="#d8a9ba"/><path d="M0 137 86 95 86 168 0 210Z" fill="#b57eab"/>
- <path d="M-60 65V-10L-40-24-20-10V84Z" fill="#e8c7d2"/><path d="M-40-24-20-10V84L-40 95Z" fill="#c68da9"/><path d="M-70-10-40-47-10-10Z" fill="#744ca4"/><path d="M-40-47-10-10-40-1Z" fill="#b17ed0"/>
- <path d="M20 55V-24L43-39 66-24V34Z" fill="#f3d8d9"/><path d="M43-39 66-24V34L43 45Z" fill="#c78fb6"/><path d="M10-24 43-65 76-24Z" fill="#7545a0"/><path d="M43-65 76-24 43-12Z" fill="#b17ed0"/>
- <path d="M-20 100V35L0 20 20 35V110Z" fill="#fff0c9"/><path d="M0 20 20 35V110L0 120Z" fill="#dfb1bc"/><path d="M-29 35 0 0 29 35Z" fill="#6445a0"/><path d="M0 0 29 35 0 45Z" fill="#aa76ca"/>
- <path d="M-10 210V165Q0 143 10 165V210Z" fill="#664b91"/><path d="M-10 210V165Q0 143 10 165V210Z" fill="#664b91"/>
- <g fill="#76d8f2" stroke="#fff0d0" stroke-width="4"><rect x="-52" y="28" width="13" height="22" rx="6"/><rect x="29" y="15" width="13" height="22" rx="6"/><rect x="-6" y="72" width="13" height="22" rx="6"/></g>
- <path d="M0-65V-93" stroke="#fff2a8" stroke-width="4"/><path d="M0-93 23-86 0-79Z" fill="#ff7eb7"/>
-</g>
-<!-- arched bridge -->
-<g transform="translate(270 520)" filter="url(#shadow3d)"><path d="M0 45Q85 -35 170 45L170 70Q85-10 0 70Z" fill="#f6dc9d" stroke="#a87a58" stroke-width="5"/><path d="M0 45Q85-35 170 45" fill="none" stroke="#fff2c7" stroke-width="12"/><path d="M0 45V83M170 45V83" stroke="#a87a58" stroke-width="9"/></g>
-<!-- enchanted forests -->
-<g><use href="#pine" x="55" y="290"/><use href="#pine" x="90" y="320"/><use href="#pine" x="125" y="290"/><use href="#pine" x="875" y="400"/><use href="#pine" x="910" y="430"/><use href="#pine" x="840" y="445"/><use href="#pine" x="80" y="700"/><use href="#pine" x="120" y="735"/><use href="#pine" x="875" y="920"/><use href="#pine" x="915" y="950"/><use href="#pine" x="820" y="965"/></g>
-<!-- flowers, crystal shards, stepping stones -->
-<g filter="url(#shadow3d)"><g transform="translate(180 365)"><path d="M0 0V38" stroke="#398e62" stroke-width="5"/><circle cx="0" cy="-8" r="9" fill="#ff91c8"/><circle cx="-9" cy="0" r="9" fill="#ff91c8"/><circle cx="9" cy="0" r="9" fill="#ff91c8"/><circle cy="1" r="6" fill="#ffe777"/></g><g transform="translate(795 640)"><path d="M0 35 12 0 24 35Z" fill="#8f7cff"/><path d="M12 0 24 35 12 29Z" fill="#d7caff"/><path d="M28 35 38 12 48 35Z" fill="#55d8f4"/></g><g fill="#f7e5b4" stroke="#bc9666" stroke-width="3"><ellipse cx="250" cy="470" rx="17" ry="8"/><ellipse cx="285" cy="477" rx="17" ry="8"/><ellipse cx="320" cy="484" rx="17" ry="8"/></g></g>
-<g fill="#fff0a1"><path d="m710 350 8 18 20 3-15 13 4 20-17-10-17 10 4-20-15-13 20-3Z"/><path d="m330 650 6 13 15 2-11 10 3 15-13-7-13 7 3-15-11-10 15-2Z"/><path d="m720 1010 7 15 17 2-12 12 3 17-15-8-15 8 3-17-12-12 17-2Z"/></g>
-</svg>`);updateStats()}
+
+/* TRUE REAL-TIME 3D WORLD: Three.js meshes with an angled MOBA-style camera */
+let fairy3DStarted=false, fairy3DRenderer=null, fairy3DScene=null, fairy3DCamera=null;
+function initialize3DWorld(map){
+  let canvas=map.querySelector("#fairy3d-canvas");
+  if(!canvas){canvas=document.createElement("canvas");canvas.id="fairy3d-canvas";canvas.setAttribute("aria-label","Bản đồ thế giới 3D");map.prepend(canvas);}
+  canvas.style.cssText="position:absolute;inset:0;width:100%;height:100%;display:block;z-index:0;pointer-events:none";
+  if(window.THREE){buildFairy3D(map,canvas);return}
+  if(!document.getElementById("threejs-loader")){
+    const script=document.createElement("script");script.id="threejs-loader";script.src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js";
+    script.onload=()=>buildFairy3D(map,canvas);
+    script.onerror=()=>{canvas.style.background="linear-gradient(#9eddf3 0%,#c4e9c1 45%,#71b96e 100%)";};
+    document.head.appendChild(script);
+  }
+}
+function buildFairy3D(map,canvas){
+  if(!window.THREE||!map.isConnected)return;
+  const T=window.THREE;
+  if(fairy3DRenderer){try{fairy3DRenderer.dispose()}catch(e){}}
+  const w=Math.max(320,map.clientWidth),h=Math.max(900,map.clientHeight);
+  fairy3DScene=new T.Scene();fairy3DScene.background=new T.Color("#a9dff5");fairy3DScene.fog=new T.Fog("#a9dff5",36,90);
+  fairy3DCamera=new T.OrthographicCamera(-13,13,13*h/w,-13*h/w,.1,150);
+  fairy3DCamera.position.set(22,30,30);fairy3DCamera.lookAt(0,0,0);
+  fairy3DRenderer=new T.WebGLRenderer({canvas,antialias:true,alpha:false});
+  fairy3DRenderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.7));fairy3DRenderer.setSize(w,h,false);
+  fairy3DRenderer.shadowMap.enabled=true;fairy3DRenderer.shadowMap.type=T.PCFSoftShadowMap;
+  fairy3DRenderer.outputColorSpace=T.SRGBColorSpace;
+  fairy3DRenderer.toneMapping=T.ACESFilmicToneMapping;fairy3DRenderer.toneMappingExposure=1.15;
+  const hemi=new T.HemisphereLight(0xdff5ff,0x4e7950,2.1);fairy3DScene.add(hemi);
+  const sun=new T.DirectionalLight(0xfff0cf,3.0);sun.position.set(-12,25,10);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);sun.shadow.camera.left=-24;sun.shadow.camera.right=24;sun.shadow.camera.top=35;sun.shadow.camera.bottom=-35;fairy3DScene.add(sun);
+  const mat=(color,rough=.9)=>new T.MeshStandardMaterial({color,roughness:rough});
+  const grass=mat("#78bd68"),grassLight=mat("#9bd878"),cliff=mat("#9b785e"),cliffLight=mat("#c4a07a"),stone=mat("#c9c3a6"),stoneLight=mat("#eee0b7"),water=mat("#43b8e7",.25),wood=mat("#80543a"),leaf1=mat("#24785a"),leaf2=mat("#3e9a61"),leaf3=mat("#70bf67"),roof=mat("#7950b3"),roofLit=mat("#a47bd0"),wall=mat("#f2d8a7"),wallSide=mat("#cba7b4"),windowMat=new T.MeshStandardMaterial({color:"#75d9ff",emissive:"#2089b4",emissiveIntensity:.55,roughness:.25});
+  function mesh(geo,material,x,y,z,cast=true){const o=new T.Mesh(geo,material);o.position.set(x,y,z);o.castShadow=cast;o.receiveShadow=true;fairy3DScene.add(o);return o}
+  // large terrain platform and layered raised islands, with visible cliff faces
+  mesh(new T.BoxGeometry(23,.9,49),cliff,0,-.75,0);
+  mesh(new T.BoxGeometry(22.7,.35,48.7),grass,0,-.18,0);
+  for(let i=0;i<8;i++){
+    const z=-22+i*6.1,x=Math.sin(i*1.2)*4.6;
+    const hill=mesh(new T.CylinderGeometry(5.5,6.8,1.15,7,1,false),i%2?grassLight:grass,x,.25,z);
+    hill.rotation.y=.18*i;
+    mesh(new T.ConeGeometry(3.7,5.3,6),mat(i%2?"#6f9fa4":"#7899ad"),x+Math.sin(i)*2.3,2.9,z-3.0);
+    mesh(new T.ConeGeometry(2.0,2.8,6),mat("#f0f5e8"),x+Math.sin(i)*2.3,6.1,z-3.0);
+  }
+  // winding river with pale banks and stepping stones
+  const riverPts=[new T.Vector3(-12,.04,-19),new T.Vector3(-7,.05,-15),new T.Vector3(-2,.05,-10),new T.Vector3(5,.05,-8),new T.Vector3(8,.05,-2),new T.Vector3(5,.05,4),new T.Vector3(-2,.05,9),new T.Vector3(-4,.05,15),new T.Vector3(2,.05,21),new T.Vector3(10,.05,25)];
+  const riverCurve=new T.CatmullRomCurve3(riverPts);
+  mesh(new T.TubeGeometry(riverCurve,110,1.15,10,false),water,0,.03,0,false);
+  const bankCurve=new T.CatmullRomCurve3(riverPts.map(p=>new T.Vector3(p.x,.0,p.z)));
+  mesh(new T.TubeGeometry(bankCurve,110,1.42,8,false),stoneLight,0,-.02,0,false);
+  // golden stone trail meandering between destinations
+  const roadPts=[[-8,-21],[-3,-17],[3,-19],[8,-14],[7,-9],[1,-6],[-6,-5],[-8,0],[-3,4],[4,5],[8,9],[5,13],[-2,15],[-7,19],[-2,23],[4,25]];
+  const roadCurve=new T.CatmullRomCurve3(roadPts.map(p=>new T.Vector3(p[0],.13,p[1])));
+  mesh(new T.TubeGeometry(roadCurve,150,.42,7,false),stone,0,.08,0,false);
+  // decorative stepping stones
+  for(let i=0;i<35;i++){const p=roadCurve.getPoint(i/34);const s=mesh(new T.CylinderGeometry(.28,.34,.12,6),i%3?stoneLight:mat("#d7b873"),p.x,.22,p.z,false);s.rotation.y=i*.43;}
+  // low-poly conifers with layered volumetric foliage
+  function tree(x,z,s=1){mesh(new T.CylinderGeometry(.12*s,.19*s,.9*s,6),wood,x,.45*s,z);for(let j=0;j<3;j++){const y=.75*s+j*.48*s;mesh(new T.ConeGeometry((.72-j*.13)*s,.95*s,6),[leaf1,leaf2,leaf3][(j+Math.round(x+z)+9)%3],x,y,z);}}
+  for(let i=0;i<48;i++){const z=-23+(i%12)*4.1;const side=i%2?1:-1;const x=side*(8.1+(i%3)*.85);tree(x,z,.75+(i%4)*.12);}
+  // magical mushrooms, crystals and flower patches
+  for(let i=0;i<18;i++){const x=Math.sin(i*4.2)*7,z=-21+i*2.5;mesh(new T.CylinderGeometry(.06,.08,.4,5),mat("#f0d9ae"),x,.25,z,false);mesh(new T.SphereGeometry(.25,7,5),mat(i%2?"#ed79bb":"#e7a9ff"),x,.52,z,false);}
+  for(let i=0;i<9;i++){const x=-8+(i%3)*7,z=-16+Math.floor(i/3)*16;const c=mesh(new T.OctahedronGeometry(.6+i%2*.25),mat(i%2?"#7be6ff":"#c2a0ff",.28),x,.75,z);c.scale.y=1.8;}
+  // fantasy castle: block-built towers with distinct lit and shaded faces
+  function tower(x,z,height=3.5){
+    mesh(new T.BoxGeometry(1.65,height,1.65),wall,x,height/2+.1,z);
+    mesh(new T.BoxGeometry(.18,height,.04),wallSide,x+.78,height/2+.1,z+.83);
+    mesh(new T.ConeGeometry(1.18,1.8,5),roof,x,height+1,z);
+    mesh(new T.ConeGeometry(.62,.65,5),roofLit,x+.08,height+1.12,z-.03);
+    for(let j=0;j<Math.floor(height/1.2);j++)mesh(new T.BoxGeometry(.25,.48,.08),windowMat,x-.24,height*.35+j*.95,z+.84,false);
+  }
+  const cz=-16;
+  mesh(new T.BoxGeometry(5.4,2.3,4.4),wall,-1,1.15,cz);
+  mesh(new T.BoxGeometry(2.1,2.3,.12),wallSide,1.65,1.15,cz+2.2);
+  mesh(new T.BoxGeometry(.85,1.2,.16),roof,-1,.62,cz+2.28);
+  tower(-3,cz-1.2,4.3);tower(1,cz-1.1,4.9);tower(-3.1,cz+2,3.2);tower(1.1,cz+2,3.3);
+  // arched bridge made from a row of chunky stone blocks over the river
+  for(let i=0;i<9;i++){const b=mesh(new T.BoxGeometry(.72,.28,2.9),stoneLight,-3.0+i*.72,.62,-8.5);b.rotation.y=.02;}
+  for(const x of [-2.8,2.9])mesh(new T.BoxGeometry(.22,.95,.32),cliffLight,x,.9,-8.5);
+  // floating island chunks with green tops and stratified rock undersides
+  for(const [x,z,s] of [[-7,-10,1.15],[7,2,.95],[-7,12,.9],[5,20,.8]]){
+    const top=mesh(new T.CylinderGeometry(2.4*s,1.2*s,1.5*s,6),cliff,x,.3,z);top.rotation.y=.4;
+    mesh(new T.CylinderGeometry(2.28*s,1.55*s,.24,6),grassLight,x,1.05*s,z);
+    mesh(new T.ConeGeometry(1.05*s,2.2*s,6),cliffLight,x,-1.1*s,z);
+    for(let j=0;j<3;j++)tree(x+(j-1)*.55*s,z+.25*s,.38*s);
+  }
+  // gate, glowing portal, and decorative rune pillars
+  for(const x of [-1.7,1.7])mesh(new T.BoxGeometry(.5,2.8,.5),roofLit,x,.9,23);
+  const arch=mesh(new T.TorusGeometry(1.8,.22,8,24,Math.PI),mat("#f7d66b",.35),0,2.25,23);arch.rotation.z=Math.PI;
+  mesh(new T.CircleGeometry(1.25,32),new T.MeshBasicMaterial({color:"#4ed8ff",transparent:true,opacity:.45,side:T.DoubleSide}),0,1.8,22.92,false);
+  // clouds and sun as layered spheres in the sky
+  const cloudMat=new T.MeshStandardMaterial({color:"#ffffff",roughness:1});
+  for(const [x,y,z] of [[-9,10,-12],[-5,11,0],[8,12,9]])for(let j=0;j<3;j++)mesh(new T.SphereGeometry(1.05-j*.1,10,7),cloudMat,x+j*.7,y+(j%2)*.35,z,false);
+  mesh(new T.SphereGeometry(1.25,18,12),mat("#fff0a4"),9,10,-20,false);
+  // render with stable resize and light idle animation
+  const resize=()=>{if(!map.isConnected||!fairy3DRenderer)return;const nw=Math.max(320,map.clientWidth),nh=Math.max(900,map.clientHeight),aspect=nw/nh;fairy3DCamera.left=-13;fairy3DCamera.right=13;fairy3DCamera.top=13/aspect;fairy3DCamera.bottom=-13/aspect;fairy3DCamera.updateProjectionMatrix();fairy3DRenderer.setSize(nw,nh,false);};
+  resize();if(window.ResizeObserver){if(map._fairyRO)map._fairyRO.disconnect();map._fairyRO=new ResizeObserver(resize);map._fairyRO.observe(map);}
+  if(map._fairyAnim)cancelAnimationFrame(map._fairyAnim);
+  const tick=()=>{if(!map.isConnected)return;map._fairyAnim=requestAnimationFrame(tick);fairy3DRenderer.render(fairy3DScene,fairy3DCamera);};
+  tick();
+}
+
+function renderMap(){let map=document.getElementById("map");map.innerHTML="";stages.forEach(s=>{let b=document.createElement("button");let locked=!isUnlocked(s);b.className="realm "+(s.type==="boss"?"boss":s.type==="review"?"review":"")+(state.done.includes(s.id)?" done":"")+(locked?" locked":"");b.innerHTML='<span class="icon">'+s.icon+'</span><strong>'+s.name+'</strong><small>'+(state.done.includes(s.id)?"✓ Đã hoàn thành":locked?"🔒 Khóa":"Chạm để khám phá")+'</small>';b.disabled=locked;b.onclick=()=>openStage(s);map.appendChild(b)});initialize3DWorld(map);updateStats()}
 function goHome(){document.getElementById("home").style.display="block";document.getElementById("lesson").style.display="none";renderMap();window.scrollTo({top:0,behavior:"smooth"})}
 function openStage(s){if(!isUnlocked(s))return;current=s;document.getElementById("home").style.display="none";document.getElementById("lesson").style.display="block";document.getElementById("sceneIcon").textContent=s.icon;document.getElementById("sceneHeading").textContent=s.type==="boss"?"Đại chiến phép thuật":s.name;document.getElementById("sceneSub").textContent=s.type==="unit"?units[s.unit].story[0]:s.type==="boss"?"Trả lời đúng để làm suy yếu Chúa tể Bóng tối!":"Ôn lại kiến thức và thu thập năng lượng.";document.getElementById("title").textContent=s.name+" — "+s.vi;document.getElementById("desc").textContent=s.type==="unit"?"Học từ vựng, nghe phát âm, xem câu chuyện và hoàn thành nhiệm vụ. Hệ thống cũng đưa kiến thức các Unit trước trở lại để bạn ghi nhớ lâu hơn.":s.type==="boss"?"Đây là trận chiến tổng hợp. Mỗi câu trả lời đúng làm giảm năng lượng của trùm. Bạn cần đạt ít nhất 70% để chiến thắng.":"Ôn từ vựng và cấu trúc trong các Unit thuộc chặng này.";document.getElementById("quiz").style.display="none";document.getElementById("result").style.display="none";document.getElementById("actions").style.display="block";document.getElementById("lessonContent").style.display="block";let gate=document.getElementById("gate");gate.innerHTML="";if(s.type==="unit"&&s.unit>0){let p=document.createElement("p");p.className="badge";p.textContent="🔁 Cổng ôn bài cũ: có câu hỏi từ Unit "+Math.max(1,s.unit-1)+" trước khi vào bài mới.";gate.appendChild(p)}let box=document.getElementById("lessonContent");box.innerHTML="";let wordList=getWords(s);let h=document.createElement("h3");h.textContent="📚 Từ vựng trong vùng đất";box.appendChild(h);wordList.slice(0,12).forEach(w=>box.appendChild(makeWord(w)));if(s.type==="unit"){let st=units[s.unit].story;let sh=document.createElement("h3");sh.textContent="🎞️ Câu chuyện";box.appendChild(sh);let p=document.createElement("p");p.textContent=st[0];box.appendChild(p);let en=document.createElement("p");en.innerHTML="<b>"+st[1]+"</b><br><span class='translation'>"+st[2]+"</span>";box.appendChild(en);let link=document.createElement("a");link.href=s.unit===0?"./unit1.html":"./unit.html?u="+(s.unit+1);link.className="btn gold";link.style.display="inline-block";link.style.textDecoration="none";link.textContent="🎞️ Bắt đầu phim và bài học Unit "+(s.unit+1);box.appendChild(link);let gh=document.createElement("h3");gh.textContent="✨ Luyện phép thuật ngữ pháp";box.appendChild(gh);units[s.unit].grammar.forEach(g=>{let p=document.createElement("p");p.textContent=g[0].replace("___","_____");p.className="badge";box.appendChild(p)})}document.getElementById("quizTitle").textContent=s.type==="boss"?"🐉 Boss Battle":s.type==="review"?"🧠 Cổng ôn tập":"🎯 Nhiệm vụ của Unit";window.scrollTo({top:0,behavior:"smooth"})}
 function makeWord(w){let d=document.createElement("div");d.className="word";let t=document.createElement("strong");t.textContent=w[0]+" — "+w[1]+" ";let btn=document.createElement("button");btn.className="btn light";btn.textContent="🔊 Nghe";btn.onclick=()=>say(w[0]);let ex=document.createElement("div");ex.className="example";ex.textContent=w[2];let tr=document.createElement("div");tr.className="translation";tr.textContent=w[3];d.append(t,btn,ex,tr);return d}
