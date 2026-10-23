@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="fairy-build" content="FAIRY_UI_REDESIGN_V4_20261023">
+<meta name="fairy-build" content="FAIRY_FANTASY_MAP_V5_20261023">
 <script>/* FAIRY_FORCE_REFRESH_20261023: clear stale offline workers and caches */if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.getRegistrations().then(function(rs){rs.forEach(function(r){r.unregister()})}).catch(function(){});if("caches" in window)caches.keys().then(function(ks){ks.filter(function(k){return k.indexOf("fairy-english-7-")===0}).forEach(function(k){caches.delete(k)})}).catch(function(){})})}</script>
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" href="./icon.svg" type="image/svg+xml">
@@ -38,7 +38,19 @@ main{max-width:1180px;margin:auto;padding:18px clamp(12px,3vw,28px) 30px}
 .hero p{max-width:650px;line-height:1.7;color:#f1efff;margin:0 0 17px}
 .hero a{display:inline-flex;align-items:center;gap:8px;padding:11px 15px;border-radius:13px;background:#ffe7a1;color:#35285d!important;text-decoration:none;font-weight:900;box-shadow:0 4px 0 #c49d50}
 .bar{height:11px;background:#e7eafd;border-radius:99px;overflow:hidden;margin:12px 0}.bar>div{height:100%;width:0;background:linear-gradient(90deg,#7957d5,#52d4a4);border-radius:99px;transition:width .3s}
-.map{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.map{position:relative;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px 18px;padding:44px 24px 52px;border:5px solid #8a603e;border-radius:30px;overflow:hidden;background:radial-gradient(ellipse at 12% 18%,#d6f3a8 0 9%,transparent 10%),radial-gradient(ellipse at 83% 20%,#bce995 0 12%,transparent 13%),radial-gradient(ellipse at 24% 70%,#c9eda0 0 15%,transparent 16%),radial-gradient(ellipse at 82% 78%,#d8f2a7 0 14%,transparent 15%),linear-gradient(155deg,#a9df91,#d5edac 45%,#9edb9b);box-shadow:inset 0 0 0 7px #f4d28c,inset 0 0 35px #55874a;isolation:isolate}
+.map:before{content:"";position:absolute;inset:0;z-index:-1;opacity:.95;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 620'%3E%3Cpath d='M-40 250 C100 150 120 400 260 330 S430 130 520 260 S690 460 940 280' fill='none' stroke='%2388d8ed' stroke-width='58' stroke-linecap='round'/%3E%3Cpath d='M-40 250 C100 150 120 400 260 330 S430 130 520 260 S690 460 940 280' fill='none' stroke='%23c6f2f2' stroke-width='38' stroke-linecap='round'/%3E%3Cg fill='%2366a85e' stroke='%234d8a4e' stroke-width='4'%3E%3Ccircle cx='70' cy='80' r='25'/%3E%3Ccircle cx='105' cy='94' r='22'/%3E%3Ccircle cx='770' cy='90' r='28'/%3E%3Ccircle cx='812' cy='110' r='23'/%3E%3Ccircle cx='115' cy='520' r='28'/%3E%3Ccircle cx='155' cy='535' r='22'/%3E%3Ccircle cx='765' cy='520' r='28'/%3E%3Ccircle cx='805' cy='540' r='22'/%3E%3C/g%3E%3Cg fill='%23f9d77d' stroke='%23b88d48' stroke-width='4'%3E%3Cpath d='M420 60 l15 30 34 5 -25 23 6 34 -30 -16 -30 16 6 -34 -25 -23 34 -5z'/%3E%3Cpath d='M700 360 l10 20 23 3 -17 16 4 23 -20 -11 -20 11 4 -23 -17 -16 23 -3z'/%3E%3C/g%3E%3C/svg%3E") center/100% 100% no-repeat}
+.map:after{content:"XỨ SỞ THẦN TIÊN  ✦  BẢN ĐỒ HÀNH TRÌNH";position:absolute;top:12px;left:50%;transform:translateX(-50%);white-space:nowrap;background:#fff8d9;color:#67431e;border:2px solid #d6ad61;border-radius:999px;padding:7px 16px;font-size:12px;font-weight:1000;letter-spacing:1px;box-shadow:0 3px 0 #b88c4e;z-index:2}
+.realm{min-height:140px;z-index:1;text-align:center;border:3px solid #fff9d8;border-radius:24px;background:linear-gradient(145deg,#fffef4,#f3f9da);box-shadow:0 5px 0 #7ea75b,0 8px 14px #386b3740;position:relative}
+.realm:before{content:"";position:absolute;left:50%;bottom:-18px;width:18px;height:18px;transform:translateX(-50%) rotate(45deg);background:#fff3bf;border-right:2px solid #d6b45f;border-bottom:2px solid #d6b45f}
+.realm:hover:not(:disabled){transform:translateY(-4px) scale(1.02);box-shadow:0 8px 0 #7ea75b,0 12px 18px #386b3755}
+.realm .icon{display:grid;place-items:center;margin:0 auto 7px;width:56px;height:56px;border-radius:50%;border:3px solid #fff;background:linear-gradient(145deg,#fff6b6,#ffd979);font-size:29px;box-shadow:0 3px 0 #c7a04f}
+.realm strong{font-size:13px;color:#334c36}.realm small{color:#557153;font-size:11px}
+.realm.review{background:linear-gradient(145deg,#fffde8,#ffe9a4);border-color:#fff7d1;box-shadow:0 5px 0 #caa44d,0 8px 14px #795a2540}.realm.review .icon{background:#fff0a7}
+.realm.boss{background:linear-gradient(145deg,#503475,#8c4d9e 70%,#c06a9c);border-color:#f5d4ff;box-shadow:0 5px 0 #57356e,0 8px 14px #49295755}.realm.boss strong{color:white}.realm.boss .icon{background:#fff0c1}.realm.boss small{color:#fff0ff}
+.realm.done{background:linear-gradient(145deg,#effff0,#c7f5ce);border-color:#fff;box-shadow:0 5px 0 #5caa6b,0 8px 14px #386b3740}.realm.done .icon{background:#c4f3cc}
+.realm.locked{filter:grayscale(.45);opacity:.7}
+@media(max-width:760px){.map{grid-template-columns:repeat(2,minmax(0,1fr));gap:17px 12px;padding:48px 12px 24px}.map:after{font-size:9px;letter-spacing:.3px;padding:6px 9px}.realm{min-height:132px;padding:12px 8px}.realm .icon{width:48px;height:48px;font-size:25px}}
 .realm{min-height:145px;padding:16px;text-align:left;border:1px solid #dbe2f7;border-radius:20px;background:linear-gradient(145deg,#fff,#f0f3ff);color:var(--ink);box-shadow:0 4px 0 #dfe5f8;transition:transform .18s,box-shadow .18s,border-color .18s;position:relative;overflow:hidden}
 .realm:hover:not(:disabled){transform:translateY(-3px);box-shadow:0 8px 0 #dfe5f8;border-color:#9b8ce2}
 .realm .icon{font-size:32px;display:block;margin-bottom:8px}.realm strong{display:block;margin:4px 0 6px;font-size:14px}.realm small{display:block;color:#697493;line-height:1.5}
