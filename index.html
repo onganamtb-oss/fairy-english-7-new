@@ -327,7 +327,7 @@ function buildFairy3D(map,canvas){
   // decorative stepping stones
   for(let i=0;i<35;i++){const p=roadCurve.getPoint(i/34);const s=mesh(new T.CylinderGeometry(.28,.34,.12,6),i%3?stoneLight:mat("#d7b873"),p.x,.22,p.z,false);s.rotation.y=i*.43;}
   // low-poly conifers with layered volumetric foliage
-  function tree(x,z,s=1){mesh(new T.CylinderGeometry(.12*s,.19*s,.9*s,6),wood,x,.45*s,z);for(let j=0;j<3;j++){const y=.75*s+j*.48*s;mesh(new T.ConeGeometry((.72-j*.13)*s,.95*s,6),[leaf1,leaf2,leaf3][(j+Math.round(x+z)+9)%3],x,y,z);}}
+  function tree(x,z,s=1){mesh(new T.CylinderGeometry(.12*s,.19*s,.9*s,6),wood,x,.45*s,z);for(let j=0;j<3;j++){const y=.75*s+j*.48*s;mesh(new T.ConeGeometry((.72-j*.13)*s,.95*s,6),[leaf1,leaf2,leaf3][(j+Math.round(x+z)+90)%3],x,y,z);}}
   for(let i=0;i<48;i++){const z=-23+(i%12)*4.1;const side=i%2?1:-1;const x=side*(8.1+(i%3)*.85);tree(x,z,.75+(i%4)*.12);}
   // magical mushrooms, crystals and flower patches
   for(let i=0;i<18;i++){const x=Math.sin(i*4.2)*7,z=-21+i*2.5;mesh(new T.CylinderGeometry(.06,.08,.4,5),mat("#f0d9ae"),x,.25,z,false);mesh(new T.SphereGeometry(.25,7,5),mat(i%2?"#ed79bb":"#e7a9ff"),x,.52,z,false);}
