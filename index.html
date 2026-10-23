@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="fairy-build" content="FAIRY_FANTASY_MAP_V5_20261023">
+<meta name="fairy-build" content="FAIRY_STABLE_MAP_FIX_20261023">
 <script>/* FAIRY_FORCE_REFRESH_20261023: clear stale offline workers and caches */if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.getRegistrations().then(function(rs){rs.forEach(function(r){r.unregister()})}).catch(function(){});if("caches" in window)caches.keys().then(function(ks){ks.filter(function(k){return k.indexOf("fairy-english-7-")===0}).forEach(function(k){caches.delete(k)})}).catch(function(){})})}</script>
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" href="./icon.svg" type="image/svg+xml">
@@ -38,19 +38,15 @@ main{max-width:1180px;margin:auto;padding:18px clamp(12px,3vw,28px) 30px}
 .hero p{max-width:650px;line-height:1.7;color:#f1efff;margin:0 0 17px}
 .hero a{display:inline-flex;align-items:center;gap:8px;padding:11px 15px;border-radius:13px;background:#ffe7a1;color:#35285d!important;text-decoration:none;font-weight:900;box-shadow:0 4px 0 #c49d50}
 .bar{height:11px;background:#e7eafd;border-radius:99px;overflow:hidden;margin:12px 0}.bar>div{height:100%;width:0;background:linear-gradient(90deg,#7957d5,#52d4a4);border-radius:99px;transition:width .3s}
-.map{position:relative;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px 18px;padding:44px 24px 52px;border:5px solid #8a603e;border-radius:30px;overflow:hidden;background:radial-gradient(ellipse at 12% 18%,#d6f3a8 0 9%,transparent 10%),radial-gradient(ellipse at 83% 20%,#bce995 0 12%,transparent 13%),radial-gradient(ellipse at 24% 70%,#c9eda0 0 15%,transparent 16%),radial-gradient(ellipse at 82% 78%,#d8f2a7 0 14%,transparent 15%),linear-gradient(155deg,#a9df91,#d5edac 45%,#9edb9b);box-shadow:inset 0 0 0 7px #f4d28c,inset 0 0 35px #55874a;isolation:isolate}
-.map:before{content:"";position:absolute;inset:0;z-index:-1;opacity:.95;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 620'%3E%3Cpath d='M-40 250 C100 150 120 400 260 330 S430 130 520 260 S690 460 940 280' fill='none' stroke='%2388d8ed' stroke-width='58' stroke-linecap='round'/%3E%3Cpath d='M-40 250 C100 150 120 400 260 330 S430 130 520 260 S690 460 940 280' fill='none' stroke='%23c6f2f2' stroke-width='38' stroke-linecap='round'/%3E%3Cg fill='%2366a85e' stroke='%234d8a4e' stroke-width='4'%3E%3Ccircle cx='70' cy='80' r='25'/%3E%3Ccircle cx='105' cy='94' r='22'/%3E%3Ccircle cx='770' cy='90' r='28'/%3E%3Ccircle cx='812' cy='110' r='23'/%3E%3Ccircle cx='115' cy='520' r='28'/%3E%3Ccircle cx='155' cy='535' r='22'/%3E%3Ccircle cx='765' cy='520' r='28'/%3E%3Ccircle cx='805' cy='540' r='22'/%3E%3C/g%3E%3Cg fill='%23f9d77d' stroke='%23b88d48' stroke-width='4'%3E%3Cpath d='M420 60 l15 30 34 5 -25 23 6 34 -30 -16 -30 16 6 -34 -25 -23 34 -5z'/%3E%3Cpath d='M700 360 l10 20 23 3 -17 16 4 23 -20 -11 -20 11 4 -23 -17 -16 23 -3z'/%3E%3C/g%3E%3C/svg%3E") center/100% 100% no-repeat}
-.map:after{content:"XỨ SỞ THẦN TIÊN  ✦  BẢN ĐỒ HÀNH TRÌNH";position:absolute;top:12px;left:50%;transform:translateX(-50%);white-space:nowrap;background:#fff8d9;color:#67431e;border:2px solid #d6ad61;border-radius:999px;padding:7px 16px;font-size:12px;font-weight:1000;letter-spacing:1px;box-shadow:0 3px 0 #b88c4e;z-index:2}
-.realm{min-height:140px;z-index:1;text-align:center;border:3px solid #fff9d8;border-radius:24px;background:linear-gradient(145deg,#fffef4,#f3f9da);box-shadow:0 5px 0 #7ea75b,0 8px 14px #386b3740;position:relative}
-.realm:before{content:"";position:absolute;left:50%;bottom:-18px;width:18px;height:18px;transform:translateX(-50%) rotate(45deg);background:#fff3bf;border-right:2px solid #d6b45f;border-bottom:2px solid #d6b45f}
-.realm:hover:not(:disabled){transform:translateY(-4px) scale(1.02);box-shadow:0 8px 0 #7ea75b,0 12px 18px #386b3755}
-.realm .icon{display:grid;place-items:center;margin:0 auto 7px;width:56px;height:56px;border-radius:50%;border:3px solid #fff;background:linear-gradient(145deg,#fff6b6,#ffd979);font-size:29px;box-shadow:0 3px 0 #c7a04f}
-.realm strong{font-size:13px;color:#334c36}.realm small{color:#557153;font-size:11px}
-.realm.review{background:linear-gradient(145deg,#fffde8,#ffe9a4);border-color:#fff7d1;box-shadow:0 5px 0 #caa44d,0 8px 14px #795a2540}.realm.review .icon{background:#fff0a7}
-.realm.boss{background:linear-gradient(145deg,#503475,#8c4d9e 70%,#c06a9c);border-color:#f5d4ff;box-shadow:0 5px 0 #57356e,0 8px 14px #49295755}.realm.boss strong{color:white}.realm.boss .icon{background:#fff0c1}.realm.boss small{color:#fff0ff}
-.realm.done{background:linear-gradient(145deg,#effff0,#c7f5ce);border-color:#fff;box-shadow:0 5px 0 #5caa6b,0 8px 14px #386b3740}.realm.done .icon{background:#c4f3cc}
-.realm.locked{filter:grayscale(.45);opacity:.7}
-@media(max-width:760px){.map{grid-template-columns:repeat(2,minmax(0,1fr));gap:17px 12px;padding:48px 12px 24px}.map:after{font-size:9px;letter-spacing:.3px;padding:6px 9px}.realm{min-height:132px;padding:12px 8px}.realm .icon{width:48px;height:48px;font-size:25px}}
+.map{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+/* SAFE FANTASY MAP DECORATION */
+#map{position:relative;padding:38px 18px 22px;border:4px solid #8b633e;border-radius:26px;background-color:#bce5a1;background-image:radial-gradient(ellipse at 12% 20%,#d9f2a9 0 8%,transparent 9%),radial-gradient(ellipse at 85% 18%,#d5f0a7 0 10%,transparent 11%),radial-gradient(ellipse at 18% 82%,#d7f0a5 0 12%,transparent 13%),radial-gradient(ellipse at 83% 78%,#d5efa4 0 11%,transparent 12%),linear-gradient(145deg,#b7e6a0,#d5edb2 50%,#a5d98f);box-shadow:inset 0 0 0 5px #f3d18a,inset 0 0 22px #65935c}
+#map:before{content:"XỨ SỞ THẦN TIÊN · BẢN ĐỒ HÀNH TRÌNH";position:absolute;top:7px;left:50%;transform:translateX(-50%);white-space:nowrap;background:#fff7d8;color:#684621;border:1px solid #d5ad64;border-radius:20px;padding:5px 10px;font-size:10px;font-weight:900;letter-spacing:.5px}
+#map .realm{z-index:1;text-align:center;border:2px solid #fff8da;border-radius:18px;background:linear-gradient(145deg,#fffef4,#eff8d9);box-shadow:0 4px 0 #86ad65}
+#map .realm .icon{display:inline-grid;place-items:center;width:48px;height:48px;border-radius:50%;background:#ffe7a0;border:2px solid #fff7d4;box-shadow:0 2px 0 #c9a253}
+#map .realm.boss{background:linear-gradient(135deg,#503475,#92539f);box-shadow:0 4px 0 #624079}
+@media(max-width:480px){#map{padding:38px 9px 14px}#map:before{font-size:8px;letter-spacing:0;padding:5px 7px}#map .realm{padding:10px 7px}}
+
 .realm{min-height:145px;padding:16px;text-align:left;border:1px solid #dbe2f7;border-radius:20px;background:linear-gradient(145deg,#fff,#f0f3ff);color:var(--ink);box-shadow:0 4px 0 #dfe5f8;transition:transform .18s,box-shadow .18s,border-color .18s;position:relative;overflow:hidden}
 .realm:hover:not(:disabled){transform:translateY(-3px);box-shadow:0 8px 0 #dfe5f8;border-color:#9b8ce2}
 .realm .icon{font-size:32px;display:block;margin-bottom:8px}.realm strong{display:block;margin:4px 0 6px;font-size:14px}.realm small{display:block;color:#697493;line-height:1.5}
@@ -72,79 +68,16 @@ main{max-width:1180px;margin:auto;padding:18px clamp(12px,3vw,28px) 30px}
 @media(max-width:520px){.brandline{align-items:flex-start}.header-tag{display:none}.stats{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:18px}.hero{grid-template-columns:1fr;min-height:0}.hero:after{position:absolute;right:-24px;bottom:-32px;width:130px;height:130px;font-size:75px;opacity:.32}.hero>div{position:relative;z-index:1}.map{grid-template-columns:1fr}.realm{min-height:112px}.realm .icon{float:right;margin:0 0 0 10px}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
-
-/* FAIRY UI REDESIGN V4 — dashboard, storybook cards and clearer learning journey */
-:root{--ink:#202a43;--purple:#5c43a5;--gold:#ffce66;--paper:#fbf8f0;--mint:#9ce5c4;--pink:#f5b8d5;--sky:#ccefff;--line:#e8e1d4}
-body{font-family: "Trebuchet MS",ui-rounded,system-ui,sans-serif;background:#f7f4ec;background-image:radial-gradient(ellipse at 4% 28%,#dff4e7 0,transparent 24%),radial-gradient(ellipse at 96% 55%,#eee4ff 0,transparent 25%);color:var(--ink)}
-header{padding:24px clamp(16px,5vw,64px) 28px;border-radius:0 0 38px 38px;background:linear-gradient(115deg,#172f3c 0%,#245d5a 45%,#526e9e 100%);box-shadow:0 15px 35px #163e3b24}
-header:before{width:340px;height:340px;right:5%;top:-225px;border:1px solid #ffffff38;box-shadow:0 0 0 28px #ffffff09,0 0 0 58px #ffffff08}
-header:after{content:"✦  ♧  ✧  ✦";right:7%;bottom:16px;font-size:27px;letter-spacing:12px;color:#fbe4a0}
-.brandline,.stats{max-width:1240px}
-.brandmark{width:64px;height:64px;border-radius:22px;background:linear-gradient(145deg,#ffe5a3,#f6b9d6);border:3px solid #ffffff55;box-shadow:0 5px 0 #102f3c44;font-size:34px}
-header h1{font-size:clamp(24px,4vw,36px);letter-spacing:.015em}
-header p{color:#d7f3e8;font-size:14px}
-.header-tag{background:#f9e9b8;color:#274b4b;border:0;box-shadow:0 4px 0 #d6bd79;padding:10px 15px}
-.stats{gap:12px;margin-top:26px}
-.stat{border:1px solid #ffffff38;background:#ffffff12;border-radius:17px;padding:14px 16px;box-shadow:inset 0 1px #ffffff12}
-.stat span{color:#ffe5a0;font-size:19px}
-main{max-width:1240px;padding:26px clamp(14px,4vw,42px) 42px}
-#home{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:16px;align-items:stretch}
-.hero{grid-column:span 12;grid-template-columns:minmax(0,1fr) 210px;min-height:290px;padding:clamp(24px,4vw,48px);border-radius:30px;background:linear-gradient(112deg,#fff0c8 0%,#f8dfed 53%,#e2e5ff 100%);color:#24364a;box-shadow:0 10px 0 #e8d9c8,0 18px 35px #35405a12;border:1px solid #ffffff}
-.hero:after{content:"🧚🏻‍♀️";width:190px;height:190px;font-size:100px;background:radial-gradient(circle,#ffffffd9,#ffffff20 70%);border:2px solid #ffffff;filter:drop-shadow(0 12px 12px #69527a22)}
-.eyebrow{background:#fffdf5;border:1px solid #ead7a7;color:#6a5423;letter-spacing:.09em}
-.hero h2{color:#24394a;font-size:clamp(27px,4vw,43px);max-width:680px}
-.hero p{color:#4c5c6a;max-width:700px}
-.hero a{background:#245d5a;color:white!important;box-shadow:0 4px 0 #153e3d;padding:13px 17px}
-#home>.panel{margin:0;min-width:0;border:1px solid #e8e2d7;border-radius:23px;background:#fffdf8;box-shadow:0 7px 0 #e9e2d5,0 12px 24px #25384b08}
-#installPanel{grid-column:span 5;border-style:solid;background:linear-gradient(145deg,#e8f7ef,#fffdf8)}
-#installPanel h2:before{content:"✦ ";color:#4a927e}
-#home>.panel:nth-of-type(2){grid-column:span 7}
-#home>.panel:nth-of-type(3){grid-column:span 12;background:#fffdf8}
-#home>.two{grid-column:span 12;display:grid;grid-template-columns:1.1fr .9fr;gap:16px}
-#home>.two>.panel{margin:0;border:1px solid #e8e2d7;border-radius:23px;background:#fffdf8;box-shadow:0 7px 0 #e9e2d5,0 12px 24px #25384b08}
-.panel{padding:clamp(18px,2.5vw,28px)}
-.panel h2{color:#273d4c;font-size:clamp(19px,2vw,23px);display:flex;align-items:center;gap:8px}
-.muted{color:#69777d}
-.bar{height:14px;background:#e6eee8;margin:15px 0}
-.bar>div{background:linear-gradient(90deg,#4f9e83,#f1bd58,#9377c9)}
-.badge{background:#eef7f0;border:1px solid #d4eadb;color:#3e6c5b;border-radius:10px;padding:7px 11px}
-.map{grid-template-columns:repeat(3,minmax(0,1fr));gap:15px;margin-top:18px}
-.realm{min-height:178px;padding:18px;text-align:left;border:1px solid #e4e5d9;border-radius:22px;background:linear-gradient(145deg,#ffffff,#f0f7f2);box-shadow:0 6px 0 #dfe9e0;transition:transform .18s,box-shadow .18s}
-.realm:before{content:"";position:absolute;inset:0 auto 0 0;width:5px;background:#9acdb7;border-radius:22px 0 0 22px}
-.realm:hover:not(:disabled){transform:translateY(-4px) rotate(-.3deg);box-shadow:0 10px 0 #dfe9e0;border-color:#91c9b0}
-.realm .icon{display:inline-grid;place-items:center;width:54px;height:54px;border-radius:18px;background:#e1f2e7;font-size:31px;margin-bottom:10px}
-.realm strong{font-size:15px;line-height:1.35;color:#273d4c}
-.realm small{font-size:12px;line-height:1.6}
-.realm.review{background:linear-gradient(145deg,#fff9df,#fff1bd);border-color:#f0d88e;box-shadow:0 6px 0 #f0dfa7}
-.realm.review:before{background:#e7bd4f}.realm.review .icon{background:#ffebad}
-.realm.boss{color:white;background:linear-gradient(145deg,#3d315f,#79518e 70%,#b76e91);border-color:#d4a1eb;box-shadow:0 6px 0 #68417f}
-.realm.boss:before{background:#f4c96c}.realm.boss .icon{background:#ffffff21}.realm.boss strong{color:white}
-.realm.done{background:linear-gradient(145deg,#edfff5,#d8f9e8);border-color:#8cd8b0;box-shadow:0 6px 0 #b8e8cb}
-.realm.done:before{background:#4ab17a}.realm.done .icon{background:#c6f0d7}
-.realm.locked{opacity:.58;filter:grayscale(.25)}
-.btn{border-radius:12px;background:linear-gradient(135deg,#397f70,#285d61);box-shadow:0 4px 0 #b7d9ce}
-.btn.gold{background:linear-gradient(135deg,#ffdc83,#ffc653);color:#3c3a2b;box-shadow:0 4px 0 #e7b747}
-.btn.light{background:#edf4ee;color:#315c52;box-shadow:0 4px 0 #d3e4d7}
-.scene{background:linear-gradient(125deg,#204b4d,#4e7194 70%,#9276b4);border-radius:25px;padding:26px}
-.word{padding:16px 0;border-bottom:1px solid #e9eee7}.word strong{color:#315e58}
-.option{border-color:#e0e8e2;background:#fbfdf9;border-radius:13px}
-.option:hover:not(:disabled){border-color:#7db6a0;background:#eff8f1}
-.option.correct{background:#ddf9e6;border-color:#5dbd80}.option.wrong{background:#ffe4e7;border-color:#e37f8c}
-.health{background:#f3e1e4}.health div{background:linear-gradient(90deg,#e85d7c,#f2bf5c)}
-footer{margin-top:8px;color:#718079}
-@media(max-width:760px){#installPanel,#home>.panel:nth-of-type(2){grid-column:span 12}.map{grid-template-columns:repeat(2,minmax(0,1fr))}.hero{grid-template-columns:1fr 125px}.hero:after{width:120px;height:120px;font-size:65px}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:520px){header{border-radius:0 0 25px 25px}.brandline{align-items:flex-start}.header-tag{display:none}.hero{grid-template-columns:1fr;min-height:0;padding:24px}.hero:after{position:absolute;right:-15px;bottom:-25px;width:100px;height:100px;font-size:55px;opacity:.32}.hero>div{position:relative;z-index:1}#home>.two{grid-template-columns:1fr}.map{grid-template-columns:1fr}.realm{min-height:124px}.realm .icon{float:right;margin:0 0 0 12px}#installPanel,#home>.panel:nth-of-type(2){grid-column:span 12}}
-
 </style>
 </head>
 <body>
-<header><div class="brandline"><div class="brand"><div class="brandmark">🧚</div><div><h1>FAIRY ENGLISH 7</h1><p>Xứ sở Thần tiên · Global Success · Học tiếng Anh như chơi game</p></div></div><div class="header-tag">✨ FAIRY ADVENTURE · V4</div></div><div class="stats"><div class="stat">⭐ EXP <span id="xp">0</span></div><div class="stat">🪙 Xu <span id="coins">0</span></div><div class="stat">🧙 Cấp độ <span id="rank">Tân thủ</span></div><div class="stat">💎 Pha lê <span id="crystals">0</span>/12</div></div></header>
+<header><div class="brandline"><div class="brand"><div class="brandmark">🧚</div><div><h1>FAIRY ENGLISH 7</h1><p>Xứ sở Thần tiên · Global Success · Học tiếng Anh như chơi game</p></div></div><div class="header-tag">🆕 GIAO DIỆN MỚI · V3</div></div><div class="stats"><div class="stat">⭐ EXP <span id="xp">0</span></div><div class="stat">🪙 Xu <span id="coins">0</span></div><div class="stat">🧙 Cấp độ <span id="rank">Tân thủ</span></div><div class="stat">💎 Pha lê <span id="crystals">0</span>/12</div></div></header>
 <main>
 <section id="home">
 <div class="hero"><div><span class="eyebrow">✦ HÀNH TRÌNH BẮT ĐẦU</span><h2>Khám phá thế giới tiếng Anh nhiệm màu!</h2><p>Chúa tể Bóng tối đã đánh cắp 12 viên pha lê tri thức. Cùng Lumi và Ben học từ vựng, luyện ngữ pháp, vượt cổng ôn tập và chiến thắng các trận đại chiến để thắp sáng Xứ sở Thần tiên.</p><a href="story.html">▶ Xem câu chuyện mở đầu: The Lost Words</a></div></div>
 <div class="panel" id="installPanel"><h2>📲 Cài đặt và học ngoại tuyến</h2><p class="muted">Bạn có thể thêm Fairy English 7 vào màn hình chính trên trình duyệt hỗ trợ. Mở website ít nhất một lần khi có mạng để lưu các trang chính cho lần học ngoại tuyến.</p><button class="btn gold" id="installApp" type="button" style="display:none">📲 Cài đặt Fairy English 7</button><p class="muted">Trên iPhone/iPad, nếu không thấy nút cài đặt, hãy dùng Chia sẻ → Thêm vào màn hình chính trong Safari.</p></div>
 <div class="panel"><h2>🧭 Tiến trình phiêu lưu</h2><div class="bar"><div id="progress"></div></div><p class="muted" id="progressText">0 chặng hoàn thành</p><span class="badge">📚 Từ vựng</span><span class="badge">🔊 Phát âm</span><span class="badge">🧠 Ôn tập lũy tiến</span><span class="badge">🐉 Trận chiến</span></div>
-<div class="panel"><h2>🗺️ Chọn vùng đất để bắt đầu hành trình</h2><p class="muted">Mỗi vùng đất tương ứng với một Unit. Review giúp ôn kiến thức; các trận chiến lớn tổng hợp nhiều Unit. Các vùng đất được mở theo tiến trình để khuyến khích học tuần tự.</p><div class="map" id="map"></div></div>
+<div class="panel"><h2>🗺️ Bản đồ Xứ sở Thần tiên — KIỂM TRA BẢN MỚI 23/10</h2><p class="muted">Mỗi vùng đất tương ứng với một Unit. Review giúp ôn kiến thức; các trận chiến lớn tổng hợp nhiều Unit. Các vùng đất được mở theo tiến trình để khuyến khích học tuần tự.</p><div class="map" id="map"></div></div>
 <div class="two"><div class="panel"><h2>🎒 Kho báu</h2><div id="inventory">Chưa có vật phẩm. Hãy hoàn thành nhiệm vụ đầu tiên!</div><p class="muted">Tiến trình được lưu trên trình duyệt của thiết bị này.</p><button class="btn light" onclick="resetGame()">Đặt lại tiến trình</button></div><div class="panel"><h2>📜 Luật phiêu lưu</h2><ul class="list"><li>Hoàn thành thử thách để nhận EXP và xu.</li><li>Unit mới yêu cầu vượt qua cổng ôn tập kiến thức cũ.</li><li>Trả lời sai sẽ được giải thích để học lại.</li><li>Trận chiến cần đạt ít nhất 70% để chiến thắng.</li></ul></div></div>
 </section>
 <section id="lesson" style="display:none">
