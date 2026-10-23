@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="fairy-build" content="FAIRY_STABLE_MAP_FIX_20261023">
+<meta name="fairy-build" content="FAIRY_MAP_GRID_FIX_20261023">
 <script>/* FAIRY_FORCE_REFRESH_20261023: clear stale offline workers and caches */if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.getRegistrations().then(function(rs){rs.forEach(function(r){r.unregister()})}).catch(function(){});if("caches" in window)caches.keys().then(function(ks){ks.filter(function(k){return k.indexOf("fairy-english-7-")===0}).forEach(function(k){caches.delete(k)})}).catch(function(){})})}</script>
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" href="./icon.svg" type="image/svg+xml">
@@ -65,7 +65,7 @@ main{max-width:1180px;margin:auto;padding:18px clamp(12px,3vw,28px) 30px}
 #installPanel{border-style:dashed;background:#ffffffa8}
 @keyframes float{50%{transform:translateY(-6px) rotate(2deg)}}
 @media(min-width:640px){.map{grid-template-columns:repeat(3,minmax(0,1fr))}.two{grid-template-columns:1.1fr .9fr}}
-@media(max-width:520px){.brandline{align-items:flex-start}.header-tag{display:none}.stats{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:18px}.hero{grid-template-columns:1fr;min-height:0}.hero:after{position:absolute;right:-24px;bottom:-32px;width:130px;height:130px;font-size:75px;opacity:.32}.hero>div{position:relative;z-index:1}.map{grid-template-columns:1fr}.realm{min-height:112px}.realm .icon{float:right;margin:0 0 0 10px}}
+@media(max-width:520px){.brandline{align-items:flex-start}.header-tag{display:none}.stats{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:18px}.hero{grid-template-columns:1fr;min-height:0}.hero:after{position:absolute;right:-24px;bottom:-32px;width:130px;height:130px;font-size:75px;opacity:.32}.hero>div{position:relative;z-index:1}.map{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:38px 10px 18px}.realm{min-height:138px;padding:12px 8px;text-align:center}.realm .icon{float:none;display:grid;place-items:center;margin:0 auto 8px;width:46px;height:46px}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
 </style>
