@@ -375,6 +375,85 @@ function buildFairy3D(map,canvas){
   const portal=new T.Mesh(new T.TorusGeometry(1.7,.14,16,64),new T.MeshStandardMaterial({color:"#f3d78a",metalness:.65,roughness:.25,emissive:"#b47bff",emissiveIntensity:.22}));
   portal.position.set(0,2.2,23);fairy3DScene.add(portal);
   const portalVeil=new T.Mesh(new T.CircleGeometry(1.48,64),portalMat);portalVeil.position.set(0,2.2,22.96);fairy3DScene.add(portalVeil);
+  // Rich organic fallback scenery: intentionally built into the primary scene so the world
+  // still looks populated even when remote GLB downloads are blocked by a browser/network.
+  const bark=mat("#76503b"),barkLight=mat("#a8754d"),foliageA=mat("#246c55"),foliageB=mat("#39865b"),foliageC=mat("#69aa68"),flowerPink=mat("#ffb5df"),flowerGold=mat("#ffe49a"),crystalBlue=new T.MeshPhysicalMaterial({color:"#83edff",emissive:"#29a9e6",emissiveIntensity:.7,roughness:.18,metalness:.12});
+  function fairyTree(x,z,scale=1,variant=0){
+    const trunk=mesh(new T.CylinderGeometry(.13*scale,.24*scale,1.25*scale,9),bark,x,.55*scale,z);
+    trunk.rotation.z=Math.sin(x*2+z)*.08;
+    for(let k=0;k<4;k++){
+      const a=k*1.57+variant*.6,branch=mesh(new T.CylinderGeometry(.045*scale,.10*scale,.72*scale,7),barkLight,x+Math.cos(a)*.25*scale,.92*scale,z+Math.sin(a)*.25*scale);
+      branch.rotation.z=Math.cos(a)*.55;branch.rotation.x=Math.sin(a)*.42;
+    }
+    const crowns=[[0,1.45,0,.76],[.42,1.72,.08,.58],[-.38,1.7,-.12,.62],[.08,2.05,.02,.53],[-.06,1.35,.38,.48]];
+    crowns.forEach(([dx,dy,dz,r,i])=>{const c=mesh(new T.IcosahedronGeometry(r*scale,2),[foliageA,foliageB,foliageC][(variant+i)%3],x+dx*scale,dy*scale,z+dz*scale);c.scale.set(1.05,.95,.98);});
+    if(variant%3===0){const glow=mesh(new T.SphereGeometry(.11*scale,8,7),flowerGold,x+.12*scale,2.05*scale,z+.2*scale,false);glow.material=flowerGold;}
+  }
+  // A monumental storybook palace with cylindrical turrets, layered roofs, arched entrance,
+  // projecting balconies and illuminated windows; the downloaded model upgrades it when available.
+  const castleBase=mesh(new T.CylinderGeometry(4.3,4.55,.42,12),stone,-1,.23,-16);
+  const palaceMain=mesh(new T.CylinderGeometry(2.65,2.85,3.0,10),wall,-1,1.92,-16);
+  const palaceUpper=mesh(new T.CylinderGeometry(1.72,1.95,1.25,10),stoneLight,-1,3.98,-16);
+  const palaceRoof=mesh(new T.ConeGeometry(2.15,2.15,10),roofLit,-1,5.65,-16);palaceRoof.rotation.y=.16;
+  function palaceTurret(x,z,height=4.5,idx=0){
+    const base=mesh(new T.CylinderGeometry(.65,.78,.28,10),stoneLight,x,.48,z);
+    const shaft=mesh(new T.CylinderGeometry(.46,.62,height,10,3),idx%2?wallSide:wall,x,height/2+.62,z);
+    const balcony=mesh(new T.CylinderGeometry(.78,.74,.18,10),stoneLight,x,height*.56+.66,z);
+    const cap=mesh(new T.ConeGeometry(.78,1.42,9),[roof,roofLit,mat("#c28adf")][idx%3],x,height+1.45,z);cap.rotation.y=.12*idx;
+    const finial=mesh(new T.SphereGeometry(.12,10,8),flowerGold,x,height+2.22,z);
+    for(let row=0;row<Math.max(2,Math.floor(height/1.15));row++){
+      const wy=.95+row*1.05;
+      for(let side=0;side<4;side++){
+        const a=side*Math.PI/2+Math.PI/4;
+        const win=mesh(new T.BoxGeometry(.16,.43,.06),windowMat,x+Math.cos(a)*.47,wy,z+Math.sin(a)*.47,false);
+        win.rotation.y=-a;
+      }
+    }
+  }
+  palaceTurret(-3.35,-18.15,4.2,0);palaceTurret(1.4,-18.1,5.0,1);palaceTurret(-3.3,-13.6,3.45,2);palaceTurret(1.35,-13.55,3.8,3);
+  // Recessed gate and stained-glass windows on the palace front.
+  const gateFrame=mesh(new T.TorusGeometry(.72,.16,10,32,Math.PI),stoneLight,-1,.95,-13.18);gateFrame.rotation.z=Math.PI;
+  mesh(new T.BoxGeometry(1.1,1.12,.16),castleMats?wallSide:wall,-1,.55,-13.22);
+  for(let row=0;row<2;row++)for(let col=0;col<5;col++){
+    const a=(col-2)*.72;
+    const win=mesh(new T.BoxGeometry(.19,.52,.055),windowMat,-1+a,1.5+row*.8,-13.32,false);
+    win.rotation.z=(col%2?-.05:.05);
+  }
+  // A real-looking settlement around the keep, with gabled roofs, timber beams and warm windows.
+  function fairyHouse(x,z,scale=1,roofMat=roof){
+    mesh(new T.CylinderGeometry(.72*scale,.78*scale,1.25*scale,6),wall,x,.72*scale,z);
+    const roofHouse=mesh(new T.ConeGeometry(1.08*scale,1.05*scale,4),roofMat,x,1.82*scale,z);roofHouse.rotation.y=Math.PI/4;
+    mesh(new T.BoxGeometry(.27*scale,.48*scale,.07*scale),wood,x,.47*scale,z+.73*scale,false);
+    for(const dx of [-.36,.36])mesh(new T.BoxGeometry(.19*scale,.24*scale,.055*scale),windowMat,x+dx*scale,.91*scale,z+.69*scale,false);
+    for(const side of [-1,1])mesh(new T.BoxGeometry(.09*scale,1.2*scale,.09*scale),bark,x+side*.61*scale,.72*scale,z+.34*scale);
+  }
+  fairyHouse(-7.2,-11.7,.9,roofLit);fairyHouse(5.3,-15.2,.82,roof);fairyHouse(7.7,-7.2,.76,mat("#bb73bd"));fairyHouse(-7.4,2.5,.78,mat("#c18c65"));
+  // Lush layered forest, flowering clearings and glowing crystal gardens.
+  for(let i=0;i<54;i++){
+    const side=i%2?1:-1, z=-22+(i*7.31)%44, x=side*(8.2+((i*13)%9)*.36);
+    fairyTree(x,z,.68+((i*7)%6)*.105,i%3);
+  }
+  for(let i=0;i<34;i++){
+    const x=Math.sin(i*2.37)*7.2,z=-21+i*1.27;
+    if(Math.abs(x)<3.4&&z<-11)continue;
+    const stem=mesh(new T.CylinderGeometry(.025,.04,.24,6),foliageA,x,.19,z,false);
+    const bloom=mesh(new T.SphereGeometry(.105+(i%3)*.025,8,6),i%2?flowerPink:flowerGold,x,.34,z,false);
+    bloom.scale.y=.68;
+  }
+  for(const [x,z,sc] of [[-8,-5,.8],[8,-1,.72],[-5,9,.68],[7,13,.8],[1,19,.7]]){
+    const c=mesh(new T.OctahedronGeometry(sc,1),crystalBlue,x,.65,z);c.scale.y=2.1;c.rotation.y=.35;
+    mesh(new T.OctahedronGeometry(sc*.36,1),mat("#c99cff",.2),x+.58,.48,z+.2).scale.y=1.8;
+  }
+  // Stone-and-timber bridge crossing the stream with curved parapets.
+  for(let i=0;i<11;i++){
+    const x=-3.8+i*.72,z=-7.4+Math.sin(i/10*Math.PI)*.42;
+    const slab=mesh(new T.BoxGeometry(.78,.18,2.25),stoneLight,x,.58,z);slab.rotation.z=Math.sin(i/10*Math.PI)*.07;
+  }
+  for(const side of [-1,1])for(let i=0;i<6;i++){
+    const x=-3.35+i*.72,z=-7.4+side*1.0+Math.sin(i/5*Math.PI)*.18;
+    mesh(new T.CylinderGeometry(.09,.12,.56,8),stone,x,.87,z);
+  }
+
   // Preserve legacy decorative construction only as a fallback, not as the visible world.
   if(false){
     // large terrain platform and layered raised islands, with visible cliff faces
