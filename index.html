@@ -313,7 +313,71 @@ function buildFairy3D(map,canvas){
   const mat=(color,rough=.9)=>new T.MeshStandardMaterial({color,roughness:rough});
   const grass=mat("#78bd68"),grassLight=mat("#9bd878"),cliff=mat("#9b785e"),cliffLight=mat("#c4a07a"),stone=mat("#c9c3a6"),stoneLight=mat("#eee0b7"),water=mat("#43b8e7",.25),wood=mat("#80543a"),leaf1=mat("#24785a"),leaf2=mat("#3e9a61"),leaf3=mat("#70bf67"),roof=mat("#7950b3"),roofLit=mat("#a47bd0"),wall=mat("#f2d8a7"),wallSide=mat("#cba7b4"),windowMat=new T.MeshStandardMaterial({color:"#75d9ff",emissive:"#2089b4",emissiveIntensity:.55,roughness:.25});
   function mesh(geo,material,x,y,z,cast=true){const o=new T.Mesh(geo,material);o.position.set(x,y,z);o.castShadow=cast;o.receiveShadow=true;fairy3DScene.add(o);return o}
-  // large terrain platform and layered raised islands, with visible cliff faces
+  // Premium environment: sculpted terrain, winding river, waterfall and organic floating islands.
+  const terrainGeo=new T.BufferGeometry(),terrainPos=[],terrainIdx=[],terrainColors=[];
+  const nx=100,nz=190;
+  for(let iz=0;iz<=nz;iz++){
+    const z=-24+48*iz/nz;
+    for(let ix=0;ix<=nx;ix++){
+      const x=-11.3+22.6*ix/nx;
+      const edge=Math.min((11.3-Math.abs(x))/2.2,(24-Math.abs(z))/3.2);
+      const fade=Math.max(0,Math.min(1,edge));
+      const hill=(Math.sin(x*.55+z*.18)*.22+Math.sin(z*.37-x*.24)*.18+Math.cos(x*.31+z*.29)*.12);
+      const y=Math.max(-.12, .12+hill*fade+Math.max(0,Math.sin(z*.22+x*.17))*.28*fade);
+      terrainPos.push(x,y,z);
+      const tint=.88+Math.sin(x*.8+z*.34)*.08+Math.cos(z*.62-x*.2)*.05;
+      terrainColors.push(.25*tint,.48*tint,.29*tint);
+      if(ix<nx&&iz<nz){const q=iz*(nx+1)+ix;terrainIdx.push(q,q+nx+1,q+1,q+1,q+nx+1,q+nx+2);}
+    }
+  }
+  terrainGeo.setAttribute("position",new T.Float32BufferAttribute(terrainPos,3));
+  terrainGeo.setAttribute("color",new T.Float32BufferAttribute(terrainColors,3));
+  terrainGeo.setIndex(terrainIdx);terrainGeo.computeVertexNormals();
+  const terrainMat=new T.MeshStandardMaterial({vertexColors:true,roughness:.96,metalness:0,side:T.DoubleSide});
+  const terrain=new T.Mesh(terrainGeo,terrainMat);terrain.receiveShadow=true;terrain.castShadow=true;fairy3DScene.add(terrain);
+  // Layered exposed earth beneath the sculpted green realm.
+  const underMat=mat("#59456d");
+  const under=new T.Mesh(new T.CylinderGeometry(10.8,8.2,2.5,64,4,false),underMat);
+  under.scale.set(1.05,1,2.25);under.position.set(0,-1.35,0);under.rotation.y=.18;under.castShadow=true;under.receiveShadow=true;fairy3DScene.add(under);
+  // Winding, reflective river with a natural curved bank.
+  const riverPts=[new T.Vector3(-11,.34,-20),new T.Vector3(-7,.26,-15),new T.Vector3(-2,.30,-10),new T.Vector3(4,.32,-7),new T.Vector3(8,.25,-2),new T.Vector3(6,.3,4),new T.Vector3(1,.28,9),new T.Vector3(-3,.3,14),new T.Vector3(1,.32,20),new T.Vector3(8,.28,24)];
+  const riverCurve=new T.CatmullRomCurve3(riverPts);
+  const riverMesh=new T.Mesh(new T.TubeGeometry(riverCurve,180,.78,16,false),new T.MeshPhysicalMaterial({color:"#54d7f4",roughness:.16,metalness:.16,transparent:true,opacity:.88,clearcoat:1,clearcoatRoughness:.12}));
+  riverMesh.receiveShadow=true;fairy3DScene.add(riverMesh);
+  const bankCurve=new T.CatmullRomCurve3(riverPts.map(p=>new T.Vector3(p.x,p.y-.1,p.z)));
+  fairy3DScene.add(new T.Mesh(new T.TubeGeometry(bankCurve,180,1.02,12,false),new T.MeshStandardMaterial({color:"#c8bca8",roughness:1})));
+  // A visible waterfall spilling over the eastern edge into the mist.
+  const fallsMat=new T.MeshPhysicalMaterial({color:"#a9f2ff",roughness:.12,transparent:true,opacity:.72,metalness:.08,side:T.DoubleSide,clearcoat:1});
+  const fallsShape=new T.Shape();fallsShape.moveTo(0,0);fallsShape.bezierCurveTo(.5,.8,.1,1.5,.25,2.2);fallsShape.lineTo(1.05,2.2);fallsShape.bezierCurveTo(.85,1.2,1.15,.55,.7,0);fallsShape.closePath();
+  const waterfall=new T.Mesh(new T.ShapeGeometry(fallsShape,18),fallsMat);waterfall.position.set(9.25,-3.05,1.4);waterfall.rotation.y=-.16;waterfall.castShadow=false;fairy3DScene.add(waterfall);
+  const mistMat=new T.MeshBasicMaterial({color:"#a9eaff",transparent:true,opacity:.16,depthWrite:false});
+  for(let i=0;i<9;i++){const mist=new T.Mesh(new T.SphereGeometry(.38+(i%3)*.16,12,8),mistMat);mist.position.set(9.6+Math.sin(i*2)*.7,-2.9+(i%4)*.28,1.4+i*.34);fairy3DScene.add(mist);}
+  // Natural-looking floating islands with irregular rock silhouettes and lush tops.
+  function floatingIsland(x,y,z,s){
+    const g=new T.SphereGeometry(1,32,20);const p=g.attributes.position;
+    for(let i=0;i<p.count;i++){const vx=p.getX(i),vy=p.getY(i),vz=p.getZ(i);const n=1+.13*Math.sin(vx*9+vz*5)+.08*Math.cos(vy*12+vx*4);p.setXYZ(i,vx*n,vy*n,vz*n);}
+    g.computeVertexNormals();
+    const rock=new T.Mesh(g,new T.MeshStandardMaterial({color:"#776080",roughness:.95,flatShading:false}));
+    rock.scale.set(2.7*s,1.55*s,2.35*s);rock.position.set(x,y,z);rock.castShadow=true;rock.receiveShadow=true;fairy3DScene.add(rock);
+    const turf=new T.Mesh(new T.SphereGeometry(1,32,18),new T.MeshStandardMaterial({color:"#69b977",roughness:1}));
+    turf.scale.set(2.58*s,.66*s,2.22*s);turf.position.set(x,y+.76*s,z);turf.castShadow=true;turf.receiveShadow=true;fairy3DScene.add(turf);
+    const crystal=new T.Mesh(new T.OctahedronGeometry(.62*s,1),new T.MeshPhysicalMaterial({color:"#8deaff",roughness:.18,metalness:.18,emissive:"#278bd8",emissiveIntensity:.35,transparent:true,opacity:.9}));
+    crystal.position.set(x+.35*s,y+1.35*s,z-.15*s);crystal.scale.y=1.7;crystal.castShadow=true;fairy3DScene.add(crystal);
+  }
+  floatingIsland(-7,2.7,-10,1.05);floatingIsland(7,2.2,3,.82);floatingIsland(-7,1.9,13,.72);floatingIsland(5,2.6,20,.68);
+  // A curved golden path follows the terrain between the learning realms.
+  const roadPts=[[-9,-21],[-4,-17],[2,-18],[7,-13],[6,-8],[0,-5],[-6,-3],[-7,2],[-2,6],[4,7],[7,11],[3,15],[-3,17],[-6,21],[0,24]];
+  const roadCurve=new T.CatmullRomCurve3(roadPts.map(p=>new T.Vector3(p[0],.29,p[1])));
+  const pathMesh=new T.Mesh(new T.TubeGeometry(roadCurve,180,.19,8,false),new T.MeshStandardMaterial({color:"#e8d19a",roughness:.8}));
+  pathMesh.receiveShadow=true;fairy3DScene.add(pathMesh);
+  // A softly glowing entrance portal.
+  const portalMat=new T.MeshPhysicalMaterial({color:"#7be9ff",emissive:"#27a9f4",emissiveIntensity:.7,transparent:true,opacity:.58,roughness:.18,metalness:.1,side:T.DoubleSide});
+  const portal=new T.Mesh(new T.TorusGeometry(1.7,.14,16,64),new T.MeshStandardMaterial({color:"#f3d78a",metalness:.65,roughness:.25,emissive:"#b47bff",emissiveIntensity:.22}));
+  portal.position.set(0,2.2,23);fairy3DScene.add(portal);
+  const portalVeil=new T.Mesh(new T.CircleGeometry(1.48,64),portalMat);portalVeil.position.set(0,2.2,22.96);fairy3DScene.add(portalVeil);
+  // Preserve legacy decorative construction only as a fallback, not as the visible world.
+  if(false){
+    // large terrain platform and layered raised islands, with visible cliff faces
   mesh(new T.BoxGeometry(23,.9,49),cliff,0,-.75,0);
   mesh(new T.BoxGeometry(22.7,.35,48.7),grass,0,-.18,0);
   for(let i=0;i<8;i++){
@@ -368,7 +432,8 @@ function buildFairy3D(map,canvas){
   for(const x of [-1.7,1.7])mesh(new T.BoxGeometry(.5,2.8,.5),roofLit,x,.9,23);
   const arch=mesh(new T.TorusGeometry(1.8,.22,8,24,Math.PI),mat("#f7d66b",.35),0,2.25,23);arch.rotation.z=Math.PI;
   mesh(new T.CircleGeometry(1.25,32),new T.MeshBasicMaterial({color:"#4ed8ff",transparent:true,opacity:.45,side:T.DoubleSide}),0,1.8,22.92,false);
-  // Premium twilight atmosphere: star dome, aurora ribbons, moonlight and floating motes.
+  }
+    // Premium twilight atmosphere: star dome, aurora ribbons, moonlight and floating motes.
   const starPositions=[];
   for(let i=0;i<520;i++){
     const u=((i*137.508)%360)*Math.PI/180;
