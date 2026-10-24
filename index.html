@@ -386,7 +386,7 @@ function buildFairy3D(map,canvas){
       branch.rotation.z=Math.cos(a)*.55;branch.rotation.x=Math.sin(a)*.42;
     }
     const crowns=[[0,1.45,0,.76],[.42,1.72,.08,.58],[-.38,1.7,-.12,.62],[.08,2.05,.02,.53],[-.06,1.35,.38,.48]];
-    crowns.forEach(([dx,dy,dz,r,i])=>{const c=mesh(new T.IcosahedronGeometry(r*scale,2),[foliageA,foliageB,foliageC][(variant+i)%3],x+dx*scale,dy*scale,z+dz*scale);c.scale.set(1.05,.95,.98);});
+    crowns.forEach(([dx,dy,dz,r],i)=>{const c=mesh(new T.IcosahedronGeometry(r*scale,2),[foliageA,foliageB,foliageC][(variant+i)%3],x+dx*scale,dy*scale,z+dz*scale);c.scale.set(1.05,.95,.98);});
     if(variant%3===0){const glow=mesh(new T.SphereGeometry(.11*scale,8,7),flowerGold,x+.12*scale,2.05*scale,z+.2*scale,false);glow.material=flowerGold;}
   }
   // A monumental storybook palace with cylindrical turrets, layered roofs, arched entrance,
@@ -413,7 +413,7 @@ function buildFairy3D(map,canvas){
   palaceTurret(-3.35,-18.15,4.2,0);palaceTurret(1.4,-18.1,5.0,1);palaceTurret(-3.3,-13.6,3.45,2);palaceTurret(1.35,-13.55,3.8,3);
   // Recessed gate and stained-glass windows on the palace front.
   const gateFrame=mesh(new T.TorusGeometry(.72,.16,10,32,Math.PI),stoneLight,-1,.95,-13.18);gateFrame.rotation.z=Math.PI;
-  mesh(new T.BoxGeometry(1.1,1.12,.16),castleMats?wallSide:wall,-1,.55,-13.22);
+  mesh(new T.BoxGeometry(1.1,1.12,.16),wallSide,-1,.55,-13.22);
   for(let row=0;row<2;row++)for(let col=0;col<5;col++){
     const a=(col-2)*.72;
     const win=mesh(new T.BoxGeometry(.19,.52,.055),windowMat,-1+a,1.5+row*.8,-13.32,false);
