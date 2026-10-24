@@ -585,6 +585,22 @@ function buildFairy3D(map,canvas){
         const palaceGlow=new T.PointLight(0x9b83ff,3.2,19);palaceGlow.position.set(-1,4,-14);fairy3DScene.add(palaceGlow);
         // A second, independently modeled landmark gives the realm a lived-in storybook scale.
         // The full asset is CC0; load asynchronously so the existing lessons stay interactive.
+        // Add detailed storybook village buildings, rather than relying on primitive block shapes.
+        // CC0 assets from the same fantasy-village family as the focal castle.
+        const loadLandmark=(url,x,z,targetSize,rotation=0)=>loader.load(url,assetG=>{
+          const building=assetG.scene;
+          building.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true;}});
+          const bb=new T.Box3().setFromObject(building),bd=new T.Vector3(),bc=new T.Vector3();
+          bb.getSize(bd);bb.getCenter(bc);
+          const bs=targetSize/(Math.max(bd.x,bd.y,bd.z)||1);
+          building.scale.setScalar(bs);
+          building.position.set(x,-bc.y*bs,z);
+          building.position.x-=bc.x*bs;building.position.z-=bc.z*bs;
+          building.rotation.y=rotation;
+          fairy3DScene.add(building);
+        },undefined,err=>console.warn("Detailed village building could not load",err));
+        loadLandmark("https://pub-63ab27389d044634a73e89c1a0c6d4a6.r2.dev/free-library/3d-models/village-cottage/village-cottage.glb",-8.2,4.2,5.1,-.28);
+        loadLandmark("https://pub-63ab27389d044634a73e89c1a0c6d4a6.r2.dev/free-library/3d-models/village-church/village-church.glb",8.4,-3.6,5.6,.42);
         loader.load("https://pub-63ab27389d044634a73e89c1a0c6d4a6.r2.dev/free-library/3d-models/desert-watchtower/desert-watchtower.glb",towerG=>{
           const tower=towerG.scene;
           tower.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true;}});
@@ -598,13 +614,11 @@ function buildFairy3D(map,canvas){
         },undefined,err=>console.warn("Fantasy watchtower asset could not load",err));
       },undefined,err=>console.warn("Premium fantasy castle could not load",err));
       const assets=[
-        "packs/castle-kit/tower-square.glb",
         "packs/nature-kit/tree-detailed.glb",
-        "packs/tower-defense-kit/tower-round-crystals.glb",
+        "packs/nature-kit/tree-default-dark.glb",
         "packs/nature-kit/mushroom-redgroup.glb",
         "packs/nature-kit/bridge-woodround.glb",
-        "packs/castle-kit/tower-hexagon-base.glb",
-        "packs/nature-kit/tree-default-dark.glb"
+        "packs/nature-kit/rock-largea.glb"
       ];
       const loaded=await Promise.all(assets.map(url=>new Promise(resolve=>{
         loader.load(base+url,g=>resolve(g.scene),undefined,()=>resolve(null));
