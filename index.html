@@ -612,7 +612,25 @@ function buildFairy3D(map,canvas){
           tower.position.x-=tc.x*ts;tower.position.z-=tc.z*ts;
           fairy3DScene.add(tower);
         },undefined,err=>console.warn("Fantasy watchtower asset could not load",err));
-      },undefined,err=>console.warn("Premium fantasy castle could not load",err));
+      },undefined,err=>{
+        console.warn("Premium fantasy castle could not load",err);
+        const addIndependentLandmark=(url,x,z,targetSize,rotation=0)=>{
+          loader.load(url,assetG=>{
+            const model=assetG.scene;
+            model.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true;}});
+            const b=new T.Box3().setFromObject(model),d=new T.Vector3(),ctr=new T.Vector3();
+            b.getSize(d);b.getCenter(ctr);
+            const s=targetSize/(Math.max(d.x,d.y,d.z)||1);
+            model.scale.setScalar(s);
+            model.position.set(x-ctr.x*s,-ctr.y*s,z-ctr.z*s);
+            model.rotation.y=rotation;
+            fairy3DScene.add(model);
+          },undefined,e=>console.warn("Detailed landmark could not load",url,e));
+        };
+        addIndependentLandmark("https://pub-63ab27389d044634a73e89c1a0c6d4a6.r2.dev/free-library/3d-models/village-cottage/village-cottage.glb",-8.2,4.2,5.1,-.28);
+        addIndependentLandmark("https://pub-63ab27389d044634a73e89c1a0c6d4a6.r2.dev/free-library/3d-models/village-church/village-church.glb",8.4,-3.6,5.6,.42);
+        addIndependentLandmark("https://pub-63ab27389d044634a73e89c1a0c6d4a6.r2.dev/free-library/3d-models/desert-watchtower/desert-watchtower.glb",7.1,7.5,4.3);
+      });
       const assets=[
         "packs/nature-kit/tree-detailed.glb",
         "packs/nature-kit/tree-default-dark.glb",
