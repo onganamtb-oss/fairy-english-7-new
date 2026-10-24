@@ -576,13 +576,26 @@ function buildFairy3D(map,canvas){
         palace.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true;}});
         const bounds=new T.Box3().setFromObject(palace),dims=new T.Vector3(),centre=new T.Vector3();
         bounds.getSize(dims);bounds.getCenter(centre);
-        const scale=7.2/(Math.max(dims.x,dims.y,dims.z)||1);
+        const scale=10.2/(Math.max(dims.x,dims.y,dims.z)||1);
         palace.scale.setScalar(scale);
         palace.position.set(-1,-centre.y*scale,-16-centre.z*scale);
         palace.position.x-=centre.x*scale;
         fairy3DScene.add(palace);
         // Warm windows and a magical moonlit rim separate the palace from the sky.
         const palaceGlow=new T.PointLight(0x9b83ff,3.2,19);palaceGlow.position.set(-1,4,-14);fairy3DScene.add(palaceGlow);
+        // A second, independently modeled landmark gives the realm a lived-in storybook scale.
+        // The full asset is CC0; load asynchronously so the existing lessons stay interactive.
+        loader.load("https://pub-63ab27389d044634a73e89c1a0c6d4a6.r2.dev/free-library/3d-models/desert-watchtower/desert-watchtower.glb",towerG=>{
+          const tower=towerG.scene;
+          tower.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true;}});
+          const tb=new T.Box3().setFromObject(tower),td=new T.Vector3(),tc=new T.Vector3();
+          tb.getSize(td);tb.getCenter(tc);
+          const ts=4.3/(Math.max(td.x,td.y,td.z)||1);
+          tower.scale.setScalar(ts);
+          tower.position.set(7.1,-tc.y*ts,7.5);
+          tower.position.x-=tc.x*ts;tower.position.z-=tc.z*ts;
+          fairy3DScene.add(tower);
+        },undefined,err=>console.warn("Fantasy watchtower asset could not load",err));
       },undefined,err=>console.warn("Premium fantasy castle could not load",err));
       const assets=[
         "packs/castle-kit/tower-square.glb",
