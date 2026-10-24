@@ -287,11 +287,35 @@ function initialize3DWorld(map){
   let canvas=map.querySelector("#fairy3d-canvas");
   if(!canvas){canvas=document.createElement("canvas");canvas.id="fairy3d-canvas";canvas.setAttribute("aria-label","Bản đồ thế giới 3D");map.appendChild(canvas);}
   canvas.style.cssText="position:absolute;inset:0;width:100%;height:100%;display:block;z-index:0;pointer-events:none";
-  if(window.THREE){buildFairy3D(map,canvas);return}
-  if(!document.getElementById("threejs-loader")){
-    const script=document.createElement("script");script.id="threejs-loader";script.src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js";
-    script.onload=()=>buildFairy3D(map,canvas);
-    script.onerror=()=>{canvas.style.background="linear-gradient(#9eddf3 0%,#c4e9c1 45%,#71b96e 100%)";};
+  const showWorldError=(message)=>{
+    console.error("[Fairy English 7 3D]",message);
+    canvas.dataset.worldError="true";
+    canvas.style.background="linear-gradient(180deg,#8fd8f2 0%,#d5eafa 33%,#9bd6b4 66%,#527e69 100%)";
+    const ctx=canvas.getContext("2d");
+    if(ctx){
+      const w=Math.max(320,map.clientWidth),h=Math.max(900,map.clientHeight);
+      canvas.width=w;canvas.height=h;
+      const g=ctx.createLinearGradient(0,0,0,h);g.addColorStop(0,"#8fd8f2");g.addColorStop(.45,"#d7c9f6");g.addColorStop(1,"#4f876c");ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
+      ctx.fillStyle="rgba(255,255,255,.55)";
+      for(let i=0;i<35;i++){const x=(i*137)%w,y=(i*211)%h;ctx.beginPath();ctx.arc(x,y,1+(i%3),0,Math.PI*2);ctx.fill();}
+      ctx.fillStyle="#725b9d";ctx.beginPath();ctx.moveTo(w*.2,h*.52);ctx.lineTo(w*.32,h*.34);ctx.lineTo(w*.44,h*.52);ctx.lineTo(w*.58,h*.39);ctx.lineTo(w*.78,h*.55);ctx.closePath();ctx.fill();
+      ctx.fillStyle="#e8d8f4";ctx.beginPath();ctx.moveTo(w*.38,h*.24);ctx.lineTo(w*.5,h*.08);ctx.lineTo(w*.62,h*.24);ctx.closePath();ctx.fill();
+      ctx.fillStyle="#7b5d9d";ctx.fillRect(w*.42,h*.24,w*.16,h*.16);
+      ctx.fillStyle="#f8e9c9";ctx.fillRect(w*.47,h*.3,w*.06,h*.1);
+      ctx.fillStyle="#ffffff";ctx.font="600 14px system-ui";ctx.textAlign="center";ctx.fillText("Đang dùng chế độ dự phòng",w/2,h-34);
+    }
+  };
+  if(window.THREE){try{buildFairy3D(map,canvas);return}catch(error){showWorldError(error&&error.message||error);return}}
+  let script=document.getElementById("threejs-loader");
+  if(script&&script.dataset.failed==="true"){script.remove();script=null}
+  if(script&&script.dataset.loaded==="true"){try{buildFairy3D(map,canvas)}catch(error){showWorldError(error&&error.message||error)}return}
+  if(!script){
+    script=document.createElement("script");script.id="threejs-loader";script.src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js";
+    script.onload=()=>{script.dataset.loaded="true";try{buildFairy3D(map,canvas)}catch(error){showWorldError(error&&error.message||error)}};
+    script.onerror=()=>{
+      if(script.dataset.retry!=="true"){script.dataset.retry="true";script.src="https://unpkg.com/three@0.160.0/build/three.min.js";return}
+      script.dataset.failed="true";showWorldError("Không tải được thư viện Three.js từ hai CDN");
+    };
     document.head.appendChild(script);
   }
 }
